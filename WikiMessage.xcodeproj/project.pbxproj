@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		7401FD551FE9CC8B00E1C92C /* Siesta.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7401FD531FE9CC8B00E1C92C /* Siesta.framework */; settings = {ATTRIBUTES = (Required, ); }; };
+		7401FD561FE9CC8B00E1C92C /* SiestaUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7401FD541FE9CC8B00E1C92C /* SiestaUI.framework */; settings = {ATTRIBUTES = (Required, ); }; };
 		7431DD551FE19E7800AFD512 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7431DD541FE19E7800AFD512 /* Assets.xcassets */; };
 		7431DD5C1FE19E7900AFD512 /* WikiMessage MessagesExtension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 7431DD5B1FE19E7900AFD512 /* WikiMessage MessagesExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		7431DD611FE19E7900AFD512 /* Messages.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7431DD601FE19E7900AFD512 /* Messages.framework */; };
@@ -40,6 +42,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		7401FD531FE9CC8B00E1C92C /* Siesta.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Siesta.framework; path = Carthage/Build/iOS/Siesta.framework; sourceTree = "<group>"; };
+		7401FD541FE9CC8B00E1C92C /* SiestaUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SiestaUI.framework; path = Carthage/Build/iOS/SiestaUI.framework; sourceTree = "<group>"; };
 		7431DD511FE19E7800AFD512 /* WikiMessage.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WikiMessage.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7431DD541FE19E7800AFD512 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		7431DD561FE19E7800AFD512 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -56,6 +60,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7401FD551FE9CC8B00E1C92C /* Siesta.framework in Frameworks */,
+				7401FD561FE9CC8B00E1C92C /* SiestaUI.framework in Frameworks */,
 				7431DD611FE19E7900AFD512 /* Messages.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -72,6 +78,7 @@
 				7431DD521FE19E7800AFD512 /* Products */,
 			);
 			sourceTree = "<group>";
+			usesTabs = 1;
 		};
 		7431DD521FE19E7800AFD512 /* Products */ = {
 			isa = PBXGroup;
@@ -94,6 +101,8 @@
 		7431DD5F1FE19E7900AFD512 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				7401FD531FE9CC8B00E1C92C /* Siesta.framework */,
+				7401FD541FE9CC8B00E1C92C /* SiestaUI.framework */,
 				7431DD601FE19E7900AFD512 /* Messages.framework */,
 			);
 			name = Frameworks;
@@ -137,6 +146,7 @@
 				7431DD571FE19E7900AFD512 /* Sources */,
 				7431DD581FE19E7900AFD512 /* Frameworks */,
 				7431DD591FE19E7900AFD512 /* Resources */,
+				7401FD571FE9CCB600E1C92C /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -205,6 +215,26 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		7401FD571FE9CCB600E1C92C /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"$(SRCROOT)/Carthage/Build/iOS/Siesta.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/SiestaUI.framework",
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Siesta.framework",
+				"$(DERIVED_FILE_DIR)/SiestaUI.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "#/usr/local/bin/carthage copy-frameworks";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		7431DD571FE19E7900AFD512 /* Sources */ = {
@@ -349,7 +379,11 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = "iMessage App Icon";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = WQ9JFD6RMR;
+				DEVELOPMENT_TEAM = T5VJ9JRCNB;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
 				INFOPLIST_FILE = "WikiMessage MessagesExtension/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = timfall.WikiMessage.MessagesExtension;
@@ -365,7 +399,11 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = "iMessage App Icon";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = WQ9JFD6RMR;
+				DEVELOPMENT_TEAM = T5VJ9JRCNB;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
 				INFOPLIST_FILE = "WikiMessage MessagesExtension/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = timfall.WikiMessage.MessagesExtension;
@@ -380,9 +418,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				APPLICATION_EXTENSION_API_ONLY = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = WQ9JFD6RMR;
+				DEVELOPMENT_TEAM = T5VJ9JRCNB;
 				INFOPLIST_FILE = WikiMessage/Info.plist;
 				PRODUCT_BUNDLE_IDENTIFIER = timfall.WikiMessage;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -395,9 +434,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				APPLICATION_EXTENSION_API_ONLY = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = WQ9JFD6RMR;
+				DEVELOPMENT_TEAM = T5VJ9JRCNB;
 				INFOPLIST_FILE = WikiMessage/Info.plist;
 				PRODUCT_BUNDLE_IDENTIFIER = timfall.WikiMessage;
 				PRODUCT_NAME = "$(TARGET_NAME)";

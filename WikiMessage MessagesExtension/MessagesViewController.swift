@@ -9,11 +9,33 @@
 import UIKit
 import Messages
 
-class MessagesViewController: MSMessagesAppViewController {
+class MessagesViewController: MSMessagesAppViewController, UITableViewDataSource, UITableViewDelegate {
+	
+    // MARK: Properties
+    @IBOutlet weak var appSplashLabel: UILabel!
+	@IBOutlet var tableView: UITableView!
     
+	// MARK: Storage variables
+	let searchController = UISearchController(searchResultsController: nil)
+	var displayArray = Array(repeating: "s", count: 3)
+	
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
+		
+		// Mark: Setup search controller
+		searchController.searchResultsUpdater = self
+		searchController.obscuresBackgroundDuringPresentation = false
+		searchController.searchBar.placeholder = "Search Wikipedia"
+		searchController.searchBar.searchBarStyle = UISearchBarStyle.minimal
+		navigationItem.searchController = searchController
+		// Have to do this the pre-iOS 11.0 way if there's no navigation item
+		tableView.tableHeaderView = searchController.searchBar
+		self.tableView.delegate = self
+		searchController.searchBar.delegate = self
+		definesPresentationContext = true
+		debugPrint(displayArray, searchController)
+		
     }
     
     override func didReceiveMemoryWarning() {
@@ -28,6 +50,7 @@ class MessagesViewController: MSMessagesAppViewController {
         // This will happen when the extension is about to present UI.
         
         // Use this method to configure the extension and restore previously stored state.
+		tableView.reloadData()
     }
     
     override func didResignActive(with conversation: MSConversation) {
@@ -68,5 +91,63 @@ class MessagesViewController: MSMessagesAppViewController {
     
         // Use this method to finalize any behaviors associated with the change in presentation style.
     }
+	
+	
+	// MARK: Table View
+	func numberOfSections(in tableView: UITableView) -> Int {
+		return 1
+	}
+	
+	func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+		return displayArray.count
+	}
+	
+	func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+		let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
+		
+		cell.textLabel?.text = "Awesome"
+		cell.detailTextLabel?.text = displayArray[0]
+		debugPrint(cell)
+		return cell
+	}
+	
+	// MARK: Actions
+	func searchBarIsEmpty() -> Bool {
+		// Returns true if the text is empty or nil
+		return searchController.searchBar.text?.isEmpty ?? true
+	}
+	
+	func displayText(_ searchText: String) {
+		debugPrint(searchBarIsEmpty())
+		if searchBarIsEmpty() {
+			displayArray[0] = "Nothing to see here"
+		} else {
+			displayArray.append(searchText)
+		}
+		debugPrint(displayArray)
+		tableView.reloadData()
+	}
+}
 
+extension MessagesViewController: UISearchResultsUpdating {
+	// MARK: UISearchResultsUpdating
+	func updateSearchResults(for searchController: UISearchController) {
+		displayText(searchController.searchBar.text!)
+	}
+}
+
+extension MessagesViewController: UISearchBarDelegate {
+	// MARK: UISearchBarDelegate
+	func searchBarShouldEndEditing(_ searchBar: UISearchBar) -> Bool {
+//		searchBar.resignFirstResponder()
+		return true
+	}
+	
+	func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
+		tableView.reloadData()
+	}
+	
+	func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
+		tableView.reloadData()
+	}
 }
