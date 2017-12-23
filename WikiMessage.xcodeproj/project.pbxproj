@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		7401FD551FE9CC8B00E1C92C /* Siesta.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7401FD531FE9CC8B00E1C92C /* Siesta.framework */; settings = {ATTRIBUTES = (Required, ); }; };
 		7401FD561FE9CC8B00E1C92C /* SiestaUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7401FD541FE9CC8B00E1C92C /* SiestaUI.framework */; settings = {ATTRIBUTES = (Required, ); }; };
+		742CEADB1FEC811200E6B601 /* WikipediaArticle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 742CEADA1FEC811200E6B601 /* WikipediaArticle.swift */; };
 		7431DD551FE19E7800AFD512 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7431DD541FE19E7800AFD512 /* Assets.xcassets */; };
 		7431DD5C1FE19E7900AFD512 /* WikiMessage MessagesExtension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 7431DD5B1FE19E7900AFD512 /* WikiMessage MessagesExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		7431DD611FE19E7900AFD512 /* Messages.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7431DD601FE19E7900AFD512 /* Messages.framework */; };
@@ -44,6 +45,7 @@
 /* Begin PBXFileReference section */
 		7401FD531FE9CC8B00E1C92C /* Siesta.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Siesta.framework; path = Carthage/Build/iOS/Siesta.framework; sourceTree = "<group>"; };
 		7401FD541FE9CC8B00E1C92C /* SiestaUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SiestaUI.framework; path = Carthage/Build/iOS/SiestaUI.framework; sourceTree = "<group>"; };
+		742CEADA1FEC811200E6B601 /* WikipediaArticle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WikipediaArticle.swift; sourceTree = "<group>"; };
 		7431DD511FE19E7800AFD512 /* WikiMessage.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WikiMessage.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7431DD541FE19E7800AFD512 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		7431DD561FE19E7800AFD512 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -112,6 +114,7 @@
 			isa = PBXGroup;
 			children = (
 				7431DD631FE19E7900AFD512 /* MessagesViewController.swift */,
+				742CEADA1FEC811200E6B601 /* WikipediaArticle.swift */,
 				7431DD651FE19E7900AFD512 /* MainInterface.storyboard */,
 				7431DD681FE19E7900AFD512 /* Assets.xcassets */,
 				7431DD6A1FE19E7900AFD512 /* Info.plist */,
@@ -241,6 +244,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				742CEADB1FEC811200E6B601 /* WikipediaArticle.swift in Sources */,
 				7431DD641FE19E7900AFD512 /* MessagesViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

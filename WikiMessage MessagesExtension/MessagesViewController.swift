@@ -31,7 +31,6 @@ class MessagesViewController: MSMessagesAppViewController, UITableViewDataSource
 		navigationItem.searchController = searchController
 		// Have to do this the pre-iOS 11.0 way if there's no navigation item
 		tableView.tableHeaderView = searchController.searchBar
-		self.tableView.delegate = self
 		searchController.searchBar.delegate = self
 		definesPresentationContext = true
 		debugPrint(displayArray, searchController)
@@ -105,8 +104,7 @@ class MessagesViewController: MSMessagesAppViewController, UITableViewDataSource
 	func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 		let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
 		
-		cell.textLabel?.text = "Awesome"
-		cell.detailTextLabel?.text = displayArray[0]
+		cell.textLabel?.text = displayArray[indexPath.row]
 		debugPrint(cell)
 		return cell
 	}
@@ -127,6 +125,8 @@ class MessagesViewController: MSMessagesAppViewController, UITableViewDataSource
 		debugPrint(displayArray)
 		tableView.reloadData()
 	}
+	
+	// MARK: Article Manipulation
 }
 
 extension MessagesViewController: UISearchResultsUpdating {
@@ -139,15 +139,13 @@ extension MessagesViewController: UISearchResultsUpdating {
 extension MessagesViewController: UISearchBarDelegate {
 	// MARK: UISearchBarDelegate
 	func searchBarShouldEndEditing(_ searchBar: UISearchBar) -> Bool {
-//		searchBar.resignFirstResponder()
+		searchBar.resignFirstResponder()
 		return true
 	}
 	
 	func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
-		tableView.reloadData()
 	}
 	
 	func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
-		tableView.reloadData()
 	}
 }
