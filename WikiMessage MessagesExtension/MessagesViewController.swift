@@ -34,6 +34,7 @@ class MessagesViewController: MSMessagesAppViewController, UITableViewDataSource
 		searchController.searchBar.delegate = self
 		definesPresentationContext = true
 		debugPrint(displayArray, searchController)
+		searchForArticle(searchText: "wikipedia")
 		
     }
     

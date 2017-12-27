@@ -1,0 +1,6 @@
+framework module SiestaUI {
+  umbrella header "SiestaUI.h"
+
+  export *
+  module * { export * }
+}

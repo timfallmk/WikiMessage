@@ -1,2 +1,1 @@
-# Siesta REST API Framework
-github "bustoutsolutions/siesta" ~> 1.0
+github "SwiftyJSON/SwiftyJSON"
