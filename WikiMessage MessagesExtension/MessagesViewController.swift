@@ -17,7 +17,8 @@ class MessagesViewController: MSMessagesAppViewController, UITableViewDataSource
     
 	// MARK: Storage variables
 	let searchController = UISearchController(searchResultsController: nil)
-	var displayArray = Array(repeating: "s", count: 3)
+	var displayArray = [Wikipedia]()
+	var blankDisplay = Array(repeating: "p", count: 12)
 	
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -34,7 +35,6 @@ class MessagesViewController: MSMessagesAppViewController, UITableViewDataSource
 		searchController.searchBar.delegate = self
 		definesPresentationContext = true
 		debugPrint(displayArray, searchController)
-		searchForArticle(searchText: "wikipedia")
 		
     }
     
@@ -99,15 +99,35 @@ class MessagesViewController: MSMessagesAppViewController, UITableViewDataSource
 	}
 	
 	func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-		return displayArray.count
+		if isFiltering() {
+			return displayArray.count
+		}
+		return 1
 	}
 	
 	func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 		let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
 		
-		cell.textLabel?.text = displayArray[indexPath.row]
+		// MARK: Table Population Logic
+		let searchResult: Wikipedia
+		if isFiltering() {
+			searchResult = displayArray[indexPath.row]
+		} else {
+			return cell
+		}
+		
+		cell.textLabel?.text = searchResult.title
+		cell.detailTextLabel?.text = searchResult.subjectLine
+		cell.imageView?.image = UIImage(named: "articlePlaceholderImage")
 		debugPrint(cell)
 		return cell
+	}
+	
+	func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+		var article: Wikipedia
+		article = displayArray[indexPath.row]
+		article = getArticleContents(article: article)
+		debugPrint("This is article \(article)", article.articleURL)
 	}
 	
 	// MARK: Actions
@@ -116,15 +136,24 @@ class MessagesViewController: MSMessagesAppViewController, UITableViewDataSource
 		return searchController.searchBar.text?.isEmpty ?? true
 	}
 	
-	func displayText(_ searchText: String) {
-		debugPrint(searchBarIsEmpty())
-		if searchBarIsEmpty() {
-			displayArray[0] = "Nothing to see here"
+	func displayResults(_ searchText: String) {
+		if searchText.count < 3 {
+			return
 		} else {
-			displayArray.append(searchText)
+			// Clear the displayArray in case it's not empty
+			displayArray.removeAll(keepingCapacity: true)
+			let results = getSearchResults(searchText: searchText)
+			debugPrint(searchBarIsEmpty(), displayArray, results.count)
+			for i in 0..<results.count {
+				displayArray.insert(results[i], at: i)
+			}
+			debugPrint(displayArray)
+			tableView.reloadData()
 		}
-		debugPrint(displayArray)
-		tableView.reloadData()
+	}
+	
+	func isFiltering() -> Bool {
+		return searchController.isActive && !searchBarIsEmpty()
 	}
 	
 	// MARK: Article Manipulation
@@ -133,7 +162,7 @@ class MessagesViewController: MSMessagesAppViewController, UITableViewDataSource
 extension MessagesViewController: UISearchResultsUpdating {
 	// MARK: UISearchResultsUpdating
 	func updateSearchResults(for searchController: UISearchController) {
-		displayText(searchController.searchBar.text!)
+		displayResults(searchController.searchBar.text!)
 	}
 }
 
