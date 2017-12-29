@@ -27,10 +27,17 @@ struct Wikipedia {
 var searchResults = [Wikipedia]()
 var populated = Wikipedia()
 
+// TODO: I really don't like the way this works
+var isWaiting = true
+
 func getArticleContents(article: Wikipedia) -> Wikipedia {
 	populated = article
 	fetchGivenArticle(article: article)
 	debugPrint(article, populated)
+	// TODO: I really don't like the way this works
+	if isWaiting {
+		sleep(1)
+	}
 	return populated
 }
 
@@ -138,6 +145,7 @@ func populateArticleURL(url: URL) {
 
 func populateArticleText(text: String){
 	populated.fullText = text
+	isWaiting = false
 }
 
 // Given a text search query string, get a list of returned results
