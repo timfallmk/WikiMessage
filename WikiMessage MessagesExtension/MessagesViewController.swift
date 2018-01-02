@@ -126,8 +126,16 @@ class MessagesViewController: MSMessagesAppViewController, UITableViewDataSource
 	func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
 		var article: Wikipedia
 		article = displayArray[indexPath.row]
-		article = getArticleContents(article: article)
-		debugPrint("This is article \(article)", article.articleURL)
+		let selected = getArticleContents(article: article)
+		debugPrint("This is article \(selected)", selected.articleURL, article)
+		let message = MSMessage()
+		message.url = selected.articleURL
+		let conversation = activeConversation
+		conversation!.insert(message) { error in
+			if let error = error {
+				print(error)
+			}
+		}
 	}
 	
 	// MARK: Actions

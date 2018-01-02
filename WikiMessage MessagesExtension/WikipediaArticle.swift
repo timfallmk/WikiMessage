@@ -33,7 +33,7 @@ var isWaiting = true
 func getArticleContents(article: Wikipedia) -> Wikipedia {
 	populated = article
 	fetchGivenArticle(article: article)
-	debugPrint(article, populated)
+//	debugPrint(article, populated)
 	// TODO: I really don't like the way this works
 	if isWaiting {
 		sleep(1)
@@ -72,7 +72,7 @@ func fetchGivenArticle(article: Wikipedia) {
 				//				debugPrint(json)
 				let article = json["query"]["pages"][0].dictionary
 //									debugPrint(article)
-									debugPrint(article?["fullurl"])
+//									debugPrint(article?["fullurl"])
 				result = Wikipedia(title: article?["title"]?.string,
 										 articleURL: article?["fullurl"]?.url,
 										 pageID: article?["pageid"]?.int,
@@ -114,7 +114,7 @@ func fetchGivenArticle(article: Wikipedia) {
 				let json = try JSON(data: data)
 				//				debugPrint(json)
 				let article = json["parse"].dictionary
-									debugPrint(article!["text"])
+//									debugPrint(article!["text"])
 				result = Wikipedia(title: nil,
 								   articleURL: nil,
 								   pageID: article?["pageid"]?.int,
@@ -123,7 +123,6 @@ func fetchGivenArticle(article: Wikipedia) {
 								   fullText: article?["text"]!.string,
 								   subjectImageURL: nil)
 				//				debugPrint(json)
-				populateArticleText(text: result.fullText!)
 			}
 			catch let error {
 				debugPrint(error)
