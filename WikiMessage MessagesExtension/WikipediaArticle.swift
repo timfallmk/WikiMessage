@@ -8,6 +8,7 @@
 
 import Foundation
 import SwiftyJSON
+import PromiseKit
 
 struct Wikipedia {
 	var title: String?
@@ -27,17 +28,10 @@ struct Wikipedia {
 var searchResults = [Wikipedia]()
 var populated = Wikipedia()
 
-// TODO: I really don't like the way this works
-var isWaiting = true
-
 func getArticleContents(article: Wikipedia) -> Wikipedia {
 	populated = article
 	fetchGivenArticle(article: article)
 //	debugPrint(article, populated)
-	// TODO: I really don't like the way this works
-	if isWaiting {
-		sleep(1)
-	}
 	return populated
 }
 
