@@ -138,7 +138,6 @@ func populateArticleURL(url: URL) {
 
 func populateArticleText(text: String){
 	populated.fullText = text
-	isWaiting = false
 }
 
 // Given a text search query string, get a list of returned results
