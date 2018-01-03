@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		74072ACD1FFC7A6C00746C00 /* NetworkFucntions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74072ACC1FFC7A6C00746C00 /* NetworkFucntions.swift */; };
 		742CEADB1FEC811200E6B601 /* WikipediaArticle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 742CEADA1FEC811200E6B601 /* WikipediaArticle.swift */; };
 		7431DD551FE19E7800AFD512 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7431DD541FE19E7800AFD512 /* Assets.xcassets */; };
 		7431DD5C1FE19E7900AFD512 /* WikiMessage MessagesExtension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 7431DD5B1FE19E7900AFD512 /* WikiMessage MessagesExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
@@ -43,6 +44,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		74072ACC1FFC7A6C00746C00 /* NetworkFucntions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkFucntions.swift; sourceTree = "<group>"; };
 		742CEADA1FEC811200E6B601 /* WikipediaArticle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WikipediaArticle.swift; sourceTree = "<group>"; };
 		7431DD511FE19E7800AFD512 /* WikiMessage.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WikiMessage.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7431DD541FE19E7800AFD512 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -113,6 +115,7 @@
 			children = (
 				7431DD631FE19E7900AFD512 /* MessagesViewController.swift */,
 				742CEADA1FEC811200E6B601 /* WikipediaArticle.swift */,
+				74072ACC1FFC7A6C00746C00 /* NetworkFucntions.swift */,
 				74C9780E1FF461BF00880F2C /* WikiMessageCell.swift */,
 				7431DD651FE19E7900AFD512 /* MainInterface.storyboard */,
 				7431DD681FE19E7900AFD512 /* Assets.xcassets */,
@@ -241,6 +244,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				74072ACD1FFC7A6C00746C00 /* NetworkFucntions.swift in Sources */,
 				742CEADB1FEC811200E6B601 /* WikipediaArticle.swift in Sources */,
 				7431DD641FE19E7900AFD512 /* MessagesViewController.swift in Sources */,
 				74C9780F1FF461BF00880F2C /* WikiMessageCell.swift in Sources */,
