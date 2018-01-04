@@ -15,9 +15,9 @@
 		7431DD641FE19E7900AFD512 /* MessagesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7431DD631FE19E7900AFD512 /* MessagesViewController.swift */; };
 		7431DD671FE19E7900AFD512 /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7431DD651FE19E7900AFD512 /* MainInterface.storyboard */; };
 		7431DD691FE19E7900AFD512 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7431DD681FE19E7900AFD512 /* Assets.xcassets */; };
-		7435ECBB1FFD730600D1FC49 /* PromiseKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7435ECBA1FFD730600D1FC49 /* PromiseKit.framework */; };
 		7481E4231FF325BE00984FD6 /* SwiftyJSON.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7481E4221FF325BE00984FD6 /* SwiftyJSON.framework */; };
 		74C9780F1FF461BF00880F2C /* WikiMessageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74C9780E1FF461BF00880F2C /* WikiMessageCell.swift */; };
+		74DA17351FFD9ACD008254B6 /* PromiseKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7435ECBA1FFD730600D1FC49 /* PromiseKit.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -67,7 +67,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				7481E4231FF325BE00984FD6 /* SwiftyJSON.framework in Frameworks */,
-				7435ECBB1FFD730600D1FC49 /* PromiseKit.framework in Frameworks */,
+				74DA17351FFD9ACD008254B6 /* PromiseKit.framework in Frameworks */,
 				7431DD611FE19E7900AFD512 /* Messages.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -402,7 +402,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = timfall.WikiMessage.MessagesExtension;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -423,7 +423,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = timfall.WikiMessage.MessagesExtension;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;

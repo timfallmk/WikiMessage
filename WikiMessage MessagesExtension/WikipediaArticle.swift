@@ -27,109 +27,24 @@ struct Wikipedia {
 
 var searchResults = [Wikipedia]()
 var populated = Wikipedia()
+let networkFunctions = NetworkFunctions()
 
 func getArticleContents(article: Wikipedia) -> Wikipedia {
 	populated = article
-	fetchGivenArticle(article: article)
-//	debugPrint(article, populated)
+	
+	networkFunctions.fetchArticleURL(pageID: article.pageID).then { wikipedia -> Void in
+		populated.articleURL = wikipedia.articleURL
+		}.catch { error in
+			return error
+	}
+	
+	networkFunctions.fetchArticleURL(pageID: article.pageID).then { wikipedia -> Void in
+		populated.fullText = wikipedia.fullText
+		}.catch { error in
+			return error
+	}
+	
 	return populated
-}
-
-func fetchGivenArticle(article: Wikipedia) {
-	let id = String(describing: article.pageID!)
-	debugPrint(id)
-	var components = URLComponents()
-	components.scheme = "https"
-	components.host = "en.wikipedia.org"
-	components.path = "/w/api.php"
-	
-	// MARK: Set query parameters for getting URL
-	components.queryItems = [
-		URLQueryItem(name: "action", value: "query"),
-		URLQueryItem(name: "format", value: "json"),
-		URLQueryItem(name: "utf8", value: "1"),
-		// Get results in the latest format. Currently this is "2"
-		URLQueryItem(name: "formatversion", value: "latest"),
-		// Get the properies for a specific pageid
-		URLQueryItem(name: "prop", value: "info"),
-		// Get the full URL of the specified page
-		URLQueryItem(name: "inprop", value: "url"),
-		URLQueryItem(name: "pageids", value: id)
-	]
-	
-	// MARK: Populate the article URL
-	let taskURL = URLSession.shared.dataTask(with: components.url!) { (data, response, error) in
-		var result = Wikipedia()
-		if let data = data {
-			do {
-				let json = try JSON(data: data)
-				//				debugPrint(json)
-				let article = json["query"]["pages"][0].dictionary
-//									debugPrint(article)
-//									debugPrint(article?["fullurl"])
-				result = Wikipedia(title: article?["title"]?.string,
-										 articleURL: article?["fullurl"]?.url,
-										 pageID: article?["pageid"]?.int,
-										 subjectLine: nil,
-										 summeryParagrah: nil,
-										 fullText: nil,
-										 subjectImageURL: nil)
-//								debugPrint(json)
-			}
-			catch let error {
-				debugPrint(error)
-			}
-		}
-		else if let error = error {
-			debugPrint(error)
-		}
-		DispatchQueue.main.sync {
-			populateArticleURL(url: result.articleURL!)
-		}
-	}
-	taskURL.resume()
-	
-	// MARK: Set query parameters for getting text
-	components.queryItems = [
-		URLQueryItem(name: "action", value: "parse"),
-		URLQueryItem(name: "format", value: "json"),
-		URLQueryItem(name: "utf8", value: "1"),
-		// Get results in the latest format. Currently this is "2"
-		URLQueryItem(name: "formatversion", value: "latest"),
-		// Get the unparsed text for a specific pageid
-		URLQueryItem(name: "pageids", value: id)
-	]
-	
-	// MARK: Populate the article text
-	let taskText = URLSession.shared.dataTask(with: components.url!) { (data, response, error) in
-		var result = Wikipedia()
-		if let data = data {
-			do {
-				let json = try JSON(data: data)
-				//				debugPrint(json)
-				let article = json["parse"].dictionary
-//									debugPrint(article!["text"])
-				result = Wikipedia(title: nil,
-								   articleURL: nil,
-								   pageID: article?["pageid"]?.int,
-								   subjectLine: nil,
-								   summeryParagrah: nil,
-								   fullText: article?["text"]!.string,
-								   subjectImageURL: nil)
-				//				debugPrint(json)
-			}
-			catch let error {
-				debugPrint(error)
-			}
-		}
-		else if let error = error {
-			debugPrint(error)
-		}
-		DispatchQueue.main.sync {
-			populateArticleText(text: result.fullText!)
-		}
-	}
-	taskText.resume()
 }
 
 func populateArticleURL(url: URL) {
