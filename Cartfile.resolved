@@ -1,3 +1,2 @@
 github "SwiftyJSON/SwiftyJSON" "4.0.0"
-github "mxcl/PromiseKit" "5.0.3"
-github "yannickl/AwaitKit" "3.0.0"
+github "mxcl/PromiseKit" "5.0.4"

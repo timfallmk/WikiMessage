@@ -32,13 +32,13 @@ let networkFunctions = NetworkFunctions()
 func getArticleContents(article: Wikipedia) -> Wikipedia {
 	populated = article
 	
-	networkFunctions.fetchArticleURL(pageID: article.pageID).then { wikipedia -> Void in
+	networkFunctions.fetchArticleURL(pageID: article.pageID!).then { wikipedia -> Void in
 		populated.articleURL = wikipedia.articleURL
 		}.catch { error in
 			return error
 	}
 	
-	networkFunctions.fetchArticleURL(pageID: article.pageID).then { wikipedia -> Void in
+	networkFunctions.fetchArticleURL(pageID: article.pageID!).then { wikipedia -> Void in
 		populated.fullText = wikipedia.fullText
 		}.catch { error in
 			return error
