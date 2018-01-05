@@ -85,7 +85,7 @@ class NetworkFunctions {
 		]
 		
 		return Promise { fulfill, reject in
-			let task = URLSession.shared.dataTask(with: components.url!) { (data, response, error) in
+			URLSession.shared.dataTask(with: components.url!) { (data, response, error) in
 				if let data = data,
 					let json = try JSON(data: data),
 					let article = json["parse"].dictionary,

@@ -1,2 +1,2 @@
 github "SwiftyJSON/SwiftyJSON"
-github "mxcl/PromiseKit" ~> 5.0
+github "mxcl/PromiseKit" ~> 4.0
