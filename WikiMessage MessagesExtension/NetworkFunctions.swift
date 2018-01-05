@@ -42,27 +42,27 @@ class NetworkFunctions {
 			URLQueryItem(name: "pageids", value: id)
 		]
 		
-		return Promise { fulfill, reject in
-			let task = URLSession.shared.dataTask(with: components.url!) { (data, response, error) in
-				if let data = data,
-					let json = try JSON(data: data),
-					let article = json["query"]["pages"][0].dictionary,
+		return Promise<Wikipedia> { fulfill, reject in
+			URLSession.shared.dataTask(with: components.url!) { (data, response, error) in
+				if error != nil {
+					reject(error!)
+				}
+				guard let data = data else { return }
+				do {
+					let json = try JSON(data: data)
+					let article = json["query"]["pages"][0].dictionary
 					let result = Wikipedia(title: article?["title"]?.string,
 									   articleURL: article?["fullurl"]?.url,
 									   pageID: article?["pageid"]?.int,
 									   subjectLine: nil,
 									   summeryParagrah: nil,
 									   fullText: nil,
-									   subjectImageURL: nil) {
+									   subjectImageURL: nil)
 					fulfill(result)
-				} else if let error = error {
-					reject(error)
-				} else {
-					let error = Error(error)
+				} catch {
 					reject(error)
 				}
-			}
-			task.resume()
+			}.resume()
 		}
 	}
 	
@@ -86,25 +86,25 @@ class NetworkFunctions {
 		
 		return Promise { fulfill, reject in
 			URLSession.shared.dataTask(with: components.url!) { (data, response, error) in
-				if let data = data,
-					let json = try JSON(data: data),
-					let article = json["parse"].dictionary,
+				if error != nil {
+					reject(error!)
+				}
+				guard let data = data else { return }
+				do {
+					let json = try JSON(data: data)
+					let article = json["parse"].dictionary
 					let result = Wikipedia(title: nil,
 										   articleURL: nil,
 										   pageID: article?["pageid"]?.int,
 										   subjectLine: nil,
 										   summeryParagrah: nil,
 										   fullText: article?["text"]!.string,
-										   subjectImageURL: nil) {
+										   subjectImageURL: nil)
 					fulfill(result)
-				} else if let error = error {
-					reject(error)
-				} else {
-					let error = Error(error)
+				} catch {
 					reject(error)
 				}
-			}
-			task.resume()
+			}.resume()
 		}
 	}
 }

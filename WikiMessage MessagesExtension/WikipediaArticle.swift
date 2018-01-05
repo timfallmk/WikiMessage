@@ -31,20 +31,19 @@ let networkFunctions = NetworkFunctions()
 
 func getArticleContents(article: Wikipedia) -> Wikipedia {
 	populated = article
-	
-	networkFunctions.fetchArticleURL(pageID: article.pageID!).then { wikipedia -> Void in
-		populated.articleURL = wikipedia.articleURL
-		}.catch { error in
-			return error
+	firstly{
+		let articleURL =  networkFunctions.fetchArticleURL(pageID: article.pageID!)
+		populated.articleURL = articleURL.value?.articleURL
+		return articleURL
+	}.then { (wikipedia) -> Promise<Wikipedia> in
+		let articleText = networkFunctions.fetchArticleText(pageID: article.pageID!)
+		populated.fullText = articleText.value?.fullText
+		return articleText
+	}.then { (wikipedia) -> Wikipedia in
+		return populated
+	}.catch { (error) in
+		debugPrint(error)
 	}
-	
-	networkFunctions.fetchArticleURL(pageID: article.pageID!).then { wikipedia -> Void in
-		populated.fullText = wikipedia.fullText
-		}.catch { error in
-			return error
-	}
-	
-	return populated
 }
 
 func populateArticleURL(url: URL) {
