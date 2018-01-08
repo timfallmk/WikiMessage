@@ -8,6 +8,8 @@
 
 import UIKit
 import Messages
+import AwaitKit
+import SwiftSVG
 
 class MessagesViewController: MSMessagesAppViewController, UITableViewDataSource, UITableViewDelegate {
 	
@@ -50,7 +52,7 @@ class MessagesViewController: MSMessagesAppViewController, UITableViewDataSource
         // This will happen when the extension is about to present UI.
         
         // Use this method to configure the extension and restore previously stored state.
-		tableView.reloadData()
+		//tableView.reloadData()
     }
     
     override func didResignActive(with conversation: MSConversation) {
@@ -127,15 +129,18 @@ class MessagesViewController: MSMessagesAppViewController, UITableViewDataSource
 		var article: Wikipedia
 		article = displayArray[indexPath.row]
 		let selected = getArticleContents(article: article)
-		debugPrint("This is article \(selected)", selected.articleURL, article)
-		let message = MSMessage()
-		message.url = selected.articleURL
+		//debugPrint("This is article \(selected)", selected.articleURL, article)
+		
+		let message = createMessage(article: selected)
+		
 		let conversation = activeConversation
 		conversation!.insert(message) { error in
 			if let error = error {
 				print(error)
 			}
 		}
+		
+		requestPresentationStyle(.compact)
 	}
 	
 	// MARK: Actions
@@ -160,11 +165,25 @@ class MessagesViewController: MSMessagesAppViewController, UITableViewDataSource
 		}
 	}
 	
+	//private func present
+	
 	func isFiltering() -> Bool {
 		return searchController.isActive && !searchBarIsEmpty()
 	}
 	
 	// MARK: Article Manipulation
+	
+	// MARK: Covert SVG's on the fly if we run into them
+	func pageImageFromSVG(svgURL: URL) -> UIImage {
+		let uiView = UIView(SVGURL: svgURL) { (svgLayer) in
+			svgLayer.resizeToFit(self.view.bounds)
+		}
+		let renderer = UIGraphicsImageRenderer()
+		let image = renderer.image { ctx in
+			uiView.drawHierarchy(in: uiView.bounds, afterScreenUpdates: true)
+		}
+		return image
+	}
 }
 
 extension MessagesViewController: UISearchResultsUpdating {
@@ -181,9 +200,14 @@ extension MessagesViewController: UISearchBarDelegate {
 		return true
 	}
 	
+	func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+		searchBar.resignFirstResponder()
+	}
+	
 	func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
 	}
 	
 	func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
+		requestPresentationStyle(.expanded)
 	}
 }

@@ -1,2 +1,4 @@
 github "SwiftyJSON/SwiftyJSON"
 github "mxcl/PromiseKit" ~> 4.0
+github "yannickl/AwaitKit"
+github "mchoe/SwiftSVG"

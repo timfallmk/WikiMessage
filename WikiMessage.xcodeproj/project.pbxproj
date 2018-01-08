@@ -17,7 +17,9 @@
 		7431DD691FE19E7900AFD512 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7431DD681FE19E7900AFD512 /* Assets.xcassets */; };
 		745C9859200022CD00D5AFE1 /* SwiftyJSON.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7481E4221FF325BE00984FD6 /* SwiftyJSON.framework */; };
 		745C985A200022D800D5AFE1 /* PromiseKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 747F9859200021DE00C0BAEF /* PromiseKit.framework */; };
-		74C9780F1FF461BF00880F2C /* WikiMessageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74C9780E1FF461BF00880F2C /* WikiMessageCell.swift */; };
+		745C985F2000422A00D5AFE1 /* AwaitKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 745C985D200040E300D5AFE1 /* AwaitKit.framework */; };
+		74B9C40D2003F72D008C494F /* SwiftSVG.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 74B9C40C2003F72D008C494F /* SwiftSVG.framework */; };
+		74C9780F1FF461BF00880F2C /* WikiMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74C9780E1FF461BF00880F2C /* WikiMessage.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -56,9 +58,11 @@
 		7431DD661FE19E7900AFD512 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MainInterface.storyboard; sourceTree = "<group>"; };
 		7431DD681FE19E7900AFD512 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		7431DD6A1FE19E7900AFD512 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		745C985D200040E300D5AFE1 /* AwaitKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AwaitKit.framework; path = Carthage/Build/iOS/AwaitKit.framework; sourceTree = "<group>"; };
 		747F9859200021DE00C0BAEF /* PromiseKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PromiseKit.framework; path = Carthage/Build/iOS/PromiseKit.framework; sourceTree = "<group>"; };
 		7481E4221FF325BE00984FD6 /* SwiftyJSON.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftyJSON.framework; path = Carthage/Build/iOS/SwiftyJSON.framework; sourceTree = "<group>"; };
-		74C9780E1FF461BF00880F2C /* WikiMessageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WikiMessageCell.swift; sourceTree = "<group>"; };
+		74B9C40C2003F72D008C494F /* SwiftSVG.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftSVG.framework; path = Carthage/Build/iOS/SwiftSVG.framework; sourceTree = "<group>"; };
+		74C9780E1FF461BF00880F2C /* WikiMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WikiMessage.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -66,6 +70,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				74B9C40D2003F72D008C494F /* SwiftSVG.framework in Frameworks */,
+				745C985F2000422A00D5AFE1 /* AwaitKit.framework in Frameworks */,
 				745C985A200022D800D5AFE1 /* PromiseKit.framework in Frameworks */,
 				745C9859200022CD00D5AFE1 /* SwiftyJSON.framework in Frameworks */,
 				7431DD611FE19E7900AFD512 /* Messages.framework in Frameworks */,
@@ -107,6 +113,8 @@
 		7431DD5F1FE19E7900AFD512 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				74B9C40C2003F72D008C494F /* SwiftSVG.framework */,
+				745C985D200040E300D5AFE1 /* AwaitKit.framework */,
 				747F9859200021DE00C0BAEF /* PromiseKit.framework */,
 				7481E4221FF325BE00984FD6 /* SwiftyJSON.framework */,
 				7431DD601FE19E7900AFD512 /* Messages.framework */,
@@ -120,7 +128,7 @@
 				7431DD631FE19E7900AFD512 /* MessagesViewController.swift */,
 				742CEADA1FEC811200E6B601 /* WikipediaArticle.swift */,
 				74072ACC1FFC7A6C00746C00 /* NetworkFunctions.swift */,
-				74C9780E1FF461BF00880F2C /* WikiMessageCell.swift */,
+				74C9780E1FF461BF00880F2C /* WikiMessage.swift */,
 				7431DD651FE19E7900AFD512 /* MainInterface.storyboard */,
 				7431DD681FE19E7900AFD512 /* Assets.xcassets */,
 				7431DD6A1FE19E7900AFD512 /* Info.plist */,
@@ -234,10 +242,14 @@
 			inputPaths = (
 				"$(SRCROOT)/Carthage/Build/iOS/SwiftyJSON.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/PromiseKit.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/AwaitKit.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/SwiftSVG.framework",
 			);
 			outputPaths = (
 				"$(DERIVED_FILE_DIR)/SwiftyJSON.framework",
 				"$(DERIVED_FILE_DIR)/PromiseKit.framework",
+				"$(DERIVED_FILE_DIR)/AwaitKit.framework",
+				"$(DERIVED_FILE_DIR)/SwiftSVG.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -253,7 +265,7 @@
 				74072ACD1FFC7A6C00746C00 /* NetworkFunctions.swift in Sources */,
 				742CEADB1FEC811200E6B601 /* WikipediaArticle.swift in Sources */,
 				7431DD641FE19E7900AFD512 /* MessagesViewController.swift in Sources */,
-				74C9780F1FF461BF00880F2C /* WikiMessageCell.swift in Sources */,
+				74C9780F1FF461BF00880F2C /* WikiMessage.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

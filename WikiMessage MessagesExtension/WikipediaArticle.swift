@@ -9,6 +9,7 @@
 import Foundation
 import SwiftyJSON
 import PromiseKit
+import AwaitKit
 
 struct Wikipedia {
 	var title: String?
@@ -31,19 +32,16 @@ let networkFunctions = NetworkFunctions()
 
 func getArticleContents(article: Wikipedia) -> Wikipedia {
 	populated = article
-	firstly{
-		let articleURL =  networkFunctions.fetchArticleURL(pageID: article.pageID!)
-		populated.articleURL = articleURL.value?.articleURL
-		return articleURL
-	}.then { (wikipedia) -> Promise<Wikipedia> in
-		let articleText = networkFunctions.fetchArticleText(pageID: article.pageID!)
-		populated.fullText = articleText.value?.fullText
-		return articleText
-	}.then { (wikipedia) -> Wikipedia in
-		return populated
-	}.catch { (error) in
-		debugPrint(error)
-	}
+	let articleURL = try! await(networkFunctions.fetchArticleURL(pageID: article.pageID!))
+	populated.articleURL = articleURL.articleURL
+
+	let articleText = try! await(networkFunctions.fetchArticleText(pageID: article.pageID!))
+	populated.fullText = articleText.fullText
+	
+	// TODO: fix this to prepopulate images in the search list
+//	let articleImage = try! await(networkFunctions.fetchArticleThumb(pageID: article.pageID!))
+//	populated.subjectImageURL = articleImage
+	return populated
 }
 
 func populateArticleURL(url: URL) {
@@ -77,7 +75,7 @@ func searchForArticle(searchText: String) {
 		// Limit returned results to 10
 		URLQueryItem(name: "srlimit", value: "10"),
 		// Add the search text
-		URLQueryItem(name: "srsearch", value: searchText)
+		URLQueryItem(name: "srsearch", value: "morelike:\(searchText)")
 	]
 	
 	

@@ -90,6 +90,6 @@
         </scene>
     </scenes>
     <resources>
-        <image name="articlePlaceholderImage" width="200" height="200"/>
+        <image name="articlePlaceholderImage" width="300" height="300"/>
     </resources>
 </document>
