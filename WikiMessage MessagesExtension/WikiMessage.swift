@@ -31,6 +31,8 @@ func createMessage(article: Wikipedia) -> MSMessage {
 	
 	let message = MSMessage()
 	message.layout = layout
+	// Mark: URL set for message interaction
+	message.url = article.articleURL
 	
 	return message
 }
@@ -44,11 +46,16 @@ func pickImage(article: Wikipedia) -> UIImage {
 	// If the fullsize page image is an svg, fall back to the thumbnail for now
 	if (imageURL?.absoluteString.range(of: "svg") != nil ) {
 		image = try! await(networkFunctions.fetchArticleThumb(pageID: article.pageID!))
-		debugPrint("We found an svg! \(imageURL?.absoluteString)")
+		debugPrint("We found an svg! \(String(describing: imageURL?.absoluteString))")
 		// TODO: Get this working
 		// layout.image = pageImageFromSVG(svgURL: imageURL!)
 	} else {
-		image = try! await(networkFunctions.fetchArticleFullsizeImage(pageID: article.pageID!))
+		let getImage = try? await(networkFunctions.fetchArticleFullsizeImage(pageID: article.pageID!))
+		if getImage != nil {
+			image = getImage!
+		} else {
+			image = #imageLiteral(resourceName: "articlePlaceholderImage")
+		}
 	}
 	return image
 }

@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import UIKit
 import SwiftyJSON
 import PromiseKit
 import AwaitKit
@@ -18,12 +19,9 @@ struct Wikipedia {
 	var subjectLine: String?
 	var summeryParagrah: String?
 	var fullText: String?
-	var subjectImageURL: String?
+	var subjectImageURL: URL?
+	var previewImage: UIImage?
 	
-//	init(object: MarshaledObject) throws {
-//		title = try object.value(for: "title")
-//		pageID = try object.value(for: "pageid")
-//	}
 }
 
 var searchResults = [Wikipedia]()
@@ -39,7 +37,7 @@ func getArticleContents(article: Wikipedia) -> Wikipedia {
 	populated.fullText = articleText.fullText
 	
 	// TODO: fix this to prepopulate images in the search list
-//	let articleImage = try! await(networkFunctions.fetchArticleThumb(pageID: article.pageID!))
+//	let articleImage = try! await(networkFunctions.fetchArticleThumbURL(pageID: article.pageID!))
 //	populated.subjectImageURL = articleImage
 	return populated
 }
@@ -52,75 +50,33 @@ func populateArticleText(text: String){
 	populated.fullText = text
 }
 
-// Given a text search query string, get a list of returned results
-func searchForArticle(searchText: String) {
-	var results = [Wikipedia]()
-	var components = URLComponents()
-	components.scheme = "https"
-	components.host = "en.wikipedia.org"
-	components.path = "/w/api.php"
-	
-	// Set some basic query parameters
-	components.queryItems = [
-		URLQueryItem(name: "action", value: "query"),
-		URLQueryItem(name: "format", value: "json"),
-		URLQueryItem(name: "list", value: "search"),
-		// Don't show "interwiki links", only show absolute links
-		URLQueryItem(name: "iwurl", value: "1"),
-		// Include an extra section with just the returned page ID's
-		URLQueryItem(name: "indexpageids", value: "1"),
-		URLQueryItem(name: "utf8", value: "1"),
-		// Get results in the latest format. Currently this is "2"
-		URLQueryItem(name: "formatversion", value: "latest"),
-		// Limit returned results to 10
-		URLQueryItem(name: "srlimit", value: "10"),
-		// Add the search text
-		URLQueryItem(name: "srsearch", value: "morelike:\(searchText)")
-	]
-	
-	
-	
-	// Construct the query from the given options and run the request
-	let task = URLSession.shared.dataTask(with: components.url!) { (data, response, error) in
-		debugPrint(components.url!)
-		if let data = data {
-			do {
-				let json = try JSON(data: data)
-//				debugPrint(json)
-				for i in 0..<json["query"]["search"].count {
-					let article = json["query"]["search"][i].dictionary
-//					debugPrint(article)
-//					debugPrint(article!["pageid"])
-					results.append(Wikipedia(title: article!["title"]?.string,
-											 articleURL: nil,
-											 pageID: article!["pageid"]?.int,
-											 subjectLine: article!["snippet"]?.string,
-											 summeryParagrah: nil,
-											 fullText: nil,
-											 subjectImageURL: nil))
-				}
-//				debugPrint(results[1])
-//				debugPrint(json)
-			}
-			catch let error {
-				debugPrint(error)
-			}
-		}
-		else if let error = error {
-			debugPrint(error)
-		}
-		DispatchQueue.main.async {
-			setSearchResults(results: results)
-		}
-	}
-	task.resume()
-}
-
-func setSearchResults(results: [Wikipedia]) {
-	searchResults = results
-}
-
 func getSearchResults(searchText: String) -> [Wikipedia] {
-	searchForArticle(searchText: searchText)
-	return searchResults
+	let results = try! await(networkFunctions.searchForArticle(searchText: searchText))
+	return results
+}
+
+func getPreviewImagesURL(articles: [Wikipedia]) -> [Wikipedia] {
+	var list = articles
+	for i in 0..<list.count {
+		guard let url = try? await(networkFunctions.fetchArticleThumbURL(pageID: list[i].pageID!)) else {
+			list[i].subjectImageURL = nil
+			break
+		}
+		list[i].subjectImageURL = url
+	}
+	return list
+}
+
+// As suspected, this needs to be asyncronous to not drag everything to a halt
+// TODO: Make this asyncronous and cached then update results when loaded
+func getPreviewImages(articles: [Wikipedia]) -> [Wikipedia] {
+	var list = articles
+	for i in 0..<list.count {
+		guard let image = try? await(networkFunctions.fetchArticleThumb(pageID: list[i].pageID!)) else {
+			list[i].previewImage = UIImage()
+			break
+		}
+		list[i].previewImage = image
+	}
+	return list
 }

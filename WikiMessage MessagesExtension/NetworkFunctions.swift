@@ -58,7 +58,8 @@ class NetworkFunctions {
 									   subjectLine: nil,
 									   summeryParagrah: nil,
 									   fullText: nil,
-									   subjectImageURL: nil)
+									   subjectImageURL: nil,
+									   previewImage: nil)
 					fulfill(result)
 				} catch {
 					reject(error)
@@ -76,12 +77,18 @@ class NetworkFunctions {
 		
 		// MARK: Set query parameters for getting text
 		components.queryItems = [
-			URLQueryItem(name: "action", value: "parse"),
+			URLQueryItem(name: "action", value: "query"),
 			URLQueryItem(name: "format", value: "json"),
 			URLQueryItem(name: "utf8", value: "1"),
 			// Get results in the latest format. Currently this is "2"
 			URLQueryItem(name: "formatversion", value: "latest"),
-			// Get the unparsed text for a specific pageid
+			// Get the "extract"ed text for a specific pageid
+			URLQueryItem(name: "prop", value: "extracts"),
+			// Limit us to the single extract for the given article
+			URLQueryItem(name: "exlimit", value: "1"),
+			// Only use plain text
+			URLQueryItem(name: "explaintext", value: "1"),
+			URLQueryItem(name: "exsectionformat", value: "plain"),
 			URLQueryItem(name: "pageids", value: id)
 		]
 		
@@ -93,14 +100,15 @@ class NetworkFunctions {
 				guard let data = data else { return }
 				do {
 					let json = try JSON(data: data)
-					let article = json["parse"].dictionary
+					let article = json["qeury"]["pages"][id].dictionary
 					let result = Wikipedia(title: nil,
 										   articleURL: nil,
 										   pageID: article?["pageid"]?.int,
-										   subjectLine: nil,
+										   subjectLine: article?["title"]?.string,
 										   summeryParagrah: nil,
-										   fullText: article?["text"]!.string,
-										   subjectImageURL: nil)
+										   fullText: article?["extract"]!.string,
+										   subjectImageURL: nil,
+										   previewImage: nil)
 					fulfill(result)
 				} catch {
 					reject(error)
@@ -144,7 +152,7 @@ class NetworkFunctions {
 						let data = try? Data(contentsOf: sourceURL!)
 						fulfill(UIImage(data: data!)!)
 					} else {
-						reject("No images found" as! Error)
+						reject(NoThumbnailError.NoThumbnailError("No images found!"))
 					}
 				} catch {
 					reject(error)
@@ -229,7 +237,7 @@ class NetworkFunctions {
 						let data = try? Data(contentsOf: sourceURL!)
 						fulfill(UIImage(data: data!)!)
 					} else {
-						reject("No images found" as! Error)
+						reject(NoThumbnailError.NoThumbnailError("No images found"))
 					}
 				} catch {
 					reject(error)
@@ -282,6 +290,67 @@ class NetworkFunctions {
 	
 	enum NoThumbnailError: Error {
 		case NoThumbnailError(String)
+	}
+	
+	// Given a text search query string, get a list of returned results
+	func searchForArticle(searchText: String) -> Promise<[Wikipedia]> {
+		
+		var components = defaultAPIEndpoint()
+		
+		// Set some basic query parameters
+		components.queryItems = [
+			URLQueryItem(name: "action", value: "query"),
+			URLQueryItem(name: "format", value: "json"),
+			URLQueryItem(name: "list", value: "search"),
+			// Don't show "interwiki links", only show absolute links
+			URLQueryItem(name: "iwurl", value: "1"),
+			// Include an extra section with just the returned page ID's
+			URLQueryItem(name: "indexpageids", value: "1"),
+			URLQueryItem(name: "utf8", value: "1"),
+			// Get results in the latest format. Currently this is "2"
+			URLQueryItem(name: "formatversion", value: "latest"),
+			// Limit returned results to 10
+			URLQueryItem(name: "srlimit", value: "10"),
+			// Add the search text
+			URLQueryItem(name: "srsearch", value: searchText)
+		]
+		
+		
+		
+		// Construct the query from the given options and run the request
+		return Promise<[Wikipedia]> { fulfill, reject in
+			URLSession.shared.dataTask(with: components.url!) { (data, response, error) in
+				debugPrint(components.url!)
+				if error != nil {
+					reject(error!)
+				}
+				guard let data = data else { return }
+				do {
+					let json = try JSON(data: data)
+					//				debugPrint(json)
+					var results = [Wikipedia]()
+					for i in 0..<json["query"]["search"].count {
+						let article = json["query"]["search"][i].dictionary
+						//					debugPrint(article)
+						//					debugPrint(article!["pageid"])
+						results.append(Wikipedia(title: article!["title"]?.string,
+												 articleURL: nil,
+												 pageID: article!["pageid"]?.int,
+												 subjectLine: article!["snippet"]?.string,
+												 summeryParagrah: nil,
+												 fullText: nil,
+												 subjectImageURL: nil,
+												 previewImage: nil))
+					}
+					fulfill(results)
+					//				debugPrint(results[1])
+					//				debugPrint(json)
+				} catch let error {
+					reject(error)
+				}
+			}.resume()
+		}
+		
 	}
 }
 

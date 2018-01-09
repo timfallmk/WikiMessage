@@ -37,6 +37,7 @@ class MessagesViewController: MSMessagesAppViewController, UITableViewDataSource
 		searchController.searchBar.delegate = self
 		definesPresentationContext = true
 		debugPrint(displayArray, searchController)
+		tableView.reloadData()
 		
     }
     
@@ -52,7 +53,6 @@ class MessagesViewController: MSMessagesAppViewController, UITableViewDataSource
         // This will happen when the extension is about to present UI.
         
         // Use this method to configure the extension and restore previously stored state.
-		//tableView.reloadData()
     }
     
     override func didResignActive(with conversation: MSConversation) {
@@ -101,7 +101,9 @@ class MessagesViewController: MSMessagesAppViewController, UITableViewDataSource
 	}
 	
 	func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-		if isFiltering() {
+		if searchBarIsEmpty() {
+			return 0
+		} else if isFiltering() {
 			return displayArray.count
 		}
 		return 1
@@ -120,7 +122,12 @@ class MessagesViewController: MSMessagesAppViewController, UITableViewDataSource
 		
 		cell.textLabel?.text = searchResult.title
 		cell.detailTextLabel?.text = searchResult.subjectLine
-		cell.imageView?.image = UIImage(named: "articlePlaceholderImage")
+		let image: UIImage? = searchResult.previewImage
+		if image != nil {
+			cell.imageView?.image = searchResult.previewImage
+		} else {
+			cell.imageView?.image = UIImage(named: "articlePlaceholderImage")
+		}
 		debugPrint(cell)
 		return cell
 	}
@@ -151,11 +158,14 @@ class MessagesViewController: MSMessagesAppViewController, UITableViewDataSource
 	
 	func displayResults(_ searchText: String) {
 		if searchText.count < 3 {
+			tableView.reloadData()
 			return
 		} else {
 			// Clear the displayArray in case it's not empty
-			displayArray.removeAll(keepingCapacity: true)
+			//displayArray.removeAll(keepingCapacity: true)
 			let results = getSearchResults(searchText: searchText)
+			// See WikipediaArticle.swift:71 for explanation
+			//let results = getPreviewImages(articles: resultsPlain)
 			debugPrint(searchBarIsEmpty(), displayArray, results.count)
 			for i in 0..<results.count {
 				displayArray.insert(results[i], at: i)
