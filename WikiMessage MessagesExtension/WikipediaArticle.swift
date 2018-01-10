@@ -17,7 +17,7 @@ struct Wikipedia {
 	var articleURL: URL?
 	var pageID: Int?
 	var subjectLine: String?
-	var summeryParagraph: String?
+	var summeryParagrah: String?
 	var fullText: String?
 	var subjectImageURL: URL?
 	var previewImage: UIImage?
@@ -35,10 +35,6 @@ func getArticleContents(article: Wikipedia) -> Wikipedia {
 
 	let articleText = try! await(networkFunctions.fetchArticleText(pageID: article.pageID!))
 	populated.fullText = articleText.fullText
-	debugPrint(articleText)
-	if articleText.summeryParagraph != nil {
-		populated.summeryParagraph = articleText.summeryParagraph
-	}
 	
 	// TODO: fix this to prepopulate images in the search list
 //	let articleImage = try! await(networkFunctions.fetchArticleThumbURL(pageID: article.pageID!))

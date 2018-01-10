@@ -56,7 +56,7 @@ class NetworkFunctions {
 									   articleURL: article?["fullurl"]?.url,
 									   pageID: article?["pageid"]?.int,
 									   subjectLine: nil,
-									   summeryParagraph: nil,
+									   summeryParagrah: nil,
 									   fullText: nil,
 									   subjectImageURL: nil,
 									   previewImage: nil)
@@ -100,16 +100,12 @@ class NetworkFunctions {
 				guard let data = data else { return }
 				do {
 					let json = try JSON(data: data)
-					// TODO: Swifty JSON doesn't seem to properly serialize number-only field strings in nested fields.
-					// For example, "pages": { "222222":{ "pageid": "222222" produces no matches. Instead we assume here
-					// that the first result returned is the correct one, since we're searching by pageid.
-					// This should be looked into eventually.
-					let article = json["query"]["pages"][0].dictionary
+					let article = json["qeury"]["pages"][id].dictionary
 					let result = Wikipedia(title: nil,
 										   articleURL: nil,
 										   pageID: article?["pageid"]?.int,
-										   subjectLine: nil,
-										   summeryParagraph: article?["extract"]!.string,
+										   subjectLine: article?["title"]?.string,
+										   summeryParagrah: nil,
 										   fullText: article?["extract"]!.string,
 										   subjectImageURL: nil,
 										   previewImage: nil)
@@ -315,8 +311,6 @@ class NetworkFunctions {
 			URLQueryItem(name: "formatversion", value: "latest"),
 			// Limit returned results to 10
 			URLQueryItem(name: "srlimit", value: "10"),
-			// Get both the snippets for the title and the body
-			URLQueryItem(name: "srprop", value: "snippet|titlesnippet"),
 			// Add the search text
 			URLQueryItem(name: "srsearch", value: searchText)
 		]
@@ -342,8 +336,8 @@ class NetworkFunctions {
 						results.append(Wikipedia(title: article!["title"]?.string,
 												 articleURL: nil,
 												 pageID: article!["pageid"]?.int,
-												 subjectLine: article!["titlesnippet"]?.string,
-												 summeryParagraph: nil,
+												 subjectLine: article!["snippet"]?.string,
+												 summeryParagrah: nil,
 												 fullText: nil,
 												 subjectImageURL: nil,
 												 previewImage: nil))
