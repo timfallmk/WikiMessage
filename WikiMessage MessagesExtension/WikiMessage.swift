@@ -26,7 +26,7 @@ func createMessage(article: Wikipedia) -> MSMessage {
 	
 	// Properties
 	layout.caption = article.title
-	layout.trailingCaption = article.subjectLine
+	layout.trailingCaption = article.summeryParagraph
 	layout.image = pickImage(article: article)
 	
 	let message = MSMessage()
