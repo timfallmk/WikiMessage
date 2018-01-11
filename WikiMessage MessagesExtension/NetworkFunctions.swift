@@ -56,7 +56,7 @@ class NetworkFunctions {
 									   articleURL: article?["fullurl"]?.url,
 									   pageID: article?["pageid"]?.int,
 									   subjectLine: nil,
-									   summeryParagrah: nil,
+									   summeryParagraph: nil,
 									   fullText: nil,
 									   subjectImageURL: nil,
 									   previewImage: nil)
@@ -100,12 +100,16 @@ class NetworkFunctions {
 				guard let data = data else { return }
 				do {
 					let json = try JSON(data: data)
-					let article = json["qeury"]["pages"][id].dictionary
+					// TODO: Swifty JSON doesn't seem to properly serialize number-only field strings in nested fields.
+					// For example, "pages": { "222222":{ "pageid": "222222" produces no matches. Instead we assume here
+					// that the first result returned is the correct one, since we're searching by pageid.
+					// This should be looked into eventually.
+					let article = json["query"]["pages"][0].dictionary
 					let result = Wikipedia(title: nil,
 										   articleURL: nil,
 										   pageID: article?["pageid"]?.int,
-										   subjectLine: article?["title"]?.string,
-										   summeryParagrah: nil,
+										   subjectLine: nil,
+										   summeryParagraph: article?["extract"]!.string,
 										   fullText: article?["extract"]!.string,
 										   subjectImageURL: nil,
 										   previewImage: nil)
@@ -301,7 +305,7 @@ class NetworkFunctions {
 		components.queryItems = [
 			URLQueryItem(name: "action", value: "query"),
 			URLQueryItem(name: "format", value: "json"),
-			URLQueryItem(name: "list", value: "search"),
+//			URLQueryItem(name: "list", value: "search"),
 			// Don't show "interwiki links", only show absolute links
 			URLQueryItem(name: "iwurl", value: "1"),
 			// Include an extra section with just the returned page ID's
@@ -309,10 +313,24 @@ class NetworkFunctions {
 			URLQueryItem(name: "utf8", value: "1"),
 			// Get results in the latest format. Currently this is "2"
 			URLQueryItem(name: "formatversion", value: "latest"),
+			// MARK: New search API
+			// Use a generator to get all the information we need
+			URLQueryItem(name: "generator", value: "prefixsearch"),
+			// Get the properties we want in one go
+			URLQueryItem(name: "prop", value: "pageimages|pageterms"),
+			URLQueryItem(name: "piprop", value: "thumbnail"),
+			URLQueryItem(name: "pilimit", value: "10"),
+			URLQueryItem(name: "wbptterms", value: "description"),
+			// Use the "prefixsearch" generator to search for conitnuing matches
+			URLQueryItem(name: "gpssearch", value: searchText),
+			URLQueryItem(name: "gpslimit", value: "10"),
+			URLQueryItem(name: "gpsprofile", value: "fast-fuzzy")
 			// Limit returned results to 10
-			URLQueryItem(name: "srlimit", value: "10"),
+//			URLQueryItem(name: "srlimit", value: "1"),
+			// Get both the snippets for the title and the body
+//			URLQueryItem(name: "srprop", value: "snippet|titlesnippet"),
 			// Add the search text
-			URLQueryItem(name: "srsearch", value: searchText)
+//			URLQueryItem(name: "srsearch", value: searchText)
 		]
 		
 		
@@ -329,18 +347,23 @@ class NetworkFunctions {
 					let json = try JSON(data: data)
 					//				debugPrint(json)
 					var results = [Wikipedia]()
-					for i in 0..<json["query"]["search"].count {
-						let article = json["query"]["search"][i].dictionary
+					for i in 0..<json["query"]["pages"].count {
+						let article = json["query"]["pages"][i].dictionary
 						//					debugPrint(article)
 						//					debugPrint(article!["pageid"])
+						var previewImage = UIImage()
+						if article!["thumbnail"]?["source"].url != nil, let url = article!["thumbnail"]?["source"].url {
+							let data = try? Data(contentsOf: url)
+							previewImage = UIImage(data: data!)!
+						}
 						results.append(Wikipedia(title: article!["title"]?.string,
 												 articleURL: nil,
 												 pageID: article!["pageid"]?.int,
-												 subjectLine: article!["snippet"]?.string,
-												 summeryParagrah: nil,
+												 subjectLine: article!["terms"]?["description"][0].string,
+												 summeryParagraph: nil,
 												 fullText: nil,
-												 subjectImageURL: nil,
-												 previewImage: nil))
+												 subjectImageURL: article!["thumbnail"]?["source"].url ?? nil,
+												 previewImage: previewImage))
 					}
 					fulfill(results)
 					//				debugPrint(results[1])

@@ -10,6 +10,7 @@ import UIKit
 import Messages
 import AwaitKit
 import SwiftSVG
+import SafariServices
 
 class MessagesViewController: MSMessagesAppViewController, UITableViewDataSource, UITableViewDelegate {
 	
@@ -21,6 +22,7 @@ class MessagesViewController: MSMessagesAppViewController, UITableViewDataSource
 	let searchController = UISearchController(searchResultsController: nil)
 	var displayArray = [Wikipedia]()
 	var blankDisplay = Array(repeating: "p", count: 12)
+	var webView: SFSafariViewController?
 	
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -53,6 +55,15 @@ class MessagesViewController: MSMessagesAppViewController, UITableViewDataSource
         // This will happen when the extension is about to present UI.
         
         // Use this method to configure the extension and restore previously stored state.
+		
+		// MARK: Display content in browser
+		webView?.dismiss(animated: true, completion: nil)
+		if let url = conversation.selectedMessage?.url {
+			let config = SFSafariViewController.Configuration()
+			config.entersReaderIfAvailable = true
+			webView = SFSafariViewController(url: url, configuration: config)
+			present(webView!, animated: true, completion: nil)
+		}
     }
     
     override func didResignActive(with conversation: MSConversation) {
@@ -86,6 +97,13 @@ class MessagesViewController: MSMessagesAppViewController, UITableViewDataSource
         // Called before the extension transitions to a new presentation style.
     
         // Use this method to prepare for the change in presentation style.
+		
+		// MARK: Display content in browser
+		guard presentationStyle == .expanded else { return }
+		if let message = activeConversation?.selectedMessage, let url = message.url {
+			webView = SFSafariViewController(url: url)
+			present(webView!, animated: true, completion: nil)
+		}
     }
     
     override func didTransition(to presentationStyle: MSMessagesAppPresentationStyle) {
@@ -123,10 +141,12 @@ class MessagesViewController: MSMessagesAppViewController, UITableViewDataSource
 		cell.textLabel?.text = searchResult.title
 		cell.detailTextLabel?.text = searchResult.subjectLine
 		let image: UIImage? = searchResult.previewImage
-		if image != nil {
+		if image?.ciImage != nil || image?.cgImage != nil {
 			cell.imageView?.image = searchResult.previewImage
+			cell.imageView?.contentMode = .scaleToFill
 		} else {
 			cell.imageView?.image = UIImage(named: "articlePlaceholderImage")
+			cell.imageView?.contentMode = .scaleAspectFill
 		}
 		debugPrint(cell)
 		return cell
@@ -136,7 +156,7 @@ class MessagesViewController: MSMessagesAppViewController, UITableViewDataSource
 		var article: Wikipedia
 		article = displayArray[indexPath.row]
 		let selected = getArticleContents(article: article)
-		//debugPrint("This is article \(selected)", selected.articleURL, article)
+//		debugPrint("This is article \(selected)", selected.subjectLine, article)
 		
 		let message = createMessage(article: selected)
 		
@@ -166,13 +186,17 @@ class MessagesViewController: MSMessagesAppViewController, UITableViewDataSource
 			let results = getSearchResults(searchText: searchText)
 			// See WikipediaArticle.swift:71 for explanation
 			//let results = getPreviewImages(articles: resultsPlain)
-			debugPrint(searchBarIsEmpty(), displayArray, results.count)
+//			debugPrint(searchBarIsEmpty(), displayArray, results.count)
 			for i in 0..<results.count {
 				displayArray.insert(results[i], at: i)
 			}
-			debugPrint(displayArray)
+//			debugPrint(displayArray)
 			tableView.reloadData()
 		}
+	}
+	
+	func displayPage(url: URL) {
+		
 	}
 	
 	//private func present

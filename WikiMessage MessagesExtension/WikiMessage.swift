@@ -26,7 +26,7 @@ func createMessage(article: Wikipedia) -> MSMessage {
 	
 	// Properties
 	layout.caption = article.title
-	layout.trailingCaption = article.subjectLine
+	layout.subcaption = article.summeryParagraph
 	layout.image = pickImage(article: article)
 	
 	let message = MSMessage()
@@ -54,7 +54,7 @@ func pickImage(article: Wikipedia) -> UIImage {
 		if getImage != nil {
 			image = getImage!
 		} else {
-			image = #imageLiteral(resourceName: "articlePlaceholderImage")
+			image = #imageLiteral(resourceName: "defaultArticleImage")
 		}
 	}
 	return image
