@@ -17,7 +17,8 @@ class MessagesViewController: MSMessagesAppViewController, UITableViewDataSource
     // MARK: Properties
     @IBOutlet weak var appSplashLabel: UILabel!
 	@IBOutlet var tableView: UITableView!
-    
+	
+	
 	// MARK: Storage variables
 	let searchController = UISearchController(searchResultsController: nil)
 	var displayArray = [Wikipedia]()
@@ -39,11 +40,12 @@ class MessagesViewController: MSMessagesAppViewController, UITableViewDataSource
 		// Have to do this the pre-iOS 11.0 way if there's no navigation item
 		tableView.tableHeaderView = searchController.searchBar
 		searchController.searchBar.delegate = self
-		// Change the backgroun from transparent to white to prevent cells from being shown when scrolled
+		// Change the background from transparent to white to prevent cells from being shown when scrolled
 		// under the search bar itself.
 		// TODO: This is hacky and should be fixed.
 		searchController.searchBar.backgroundColor = .white
 		searchController.searchBar.addSubview(activity)
+		
 		
 		// TODO: Progress bar work
 //		searchController.searchBar.addSubview(progress)
@@ -55,12 +57,15 @@ class MessagesViewController: MSMessagesAppViewController, UITableViewDataSource
 		searchController.searchBar.autoresizesSubviews = true
 		
 		// Set the position for the loading indicator
-		// TODO: This doesn't seem to reposition properly and seems hacky. It should be fixed.
 		activity.color = .blue
 		activity.hidesWhenStopped = true
 		activity.clipsToBounds = true
-		activity.color = .darkGray
-		activity.center = CGPoint(x: (searchController.searchBar.frame.maxX - 55.0), y: searchController.searchBar.frame.midY)
+//		activity.color = .darkGray
+		activity.translatesAutoresizingMaskIntoConstraints = false
+		debugPrint(searchController.searchBar.rightAnchor, searchController.searchBar.leftAnchor)
+		NSLayoutConstraint.activate([
+			activity.rightAnchor.constraint(lessThanOrEqualTo: searchController.searchBar.rightAnchor, constant: -100.0),
+			activity.centerYAnchor.constraint(equalTo: searchController.searchBar.centerYAnchor)])
 		
 		debugPrint(searchController.searchBar.subviews)
 //		let view = UIView(
@@ -132,6 +137,7 @@ class MessagesViewController: MSMessagesAppViewController, UITableViewDataSource
 			webView = SFSafariViewController(url: url)
 			present(webView!, animated: true, completion: nil)
 		}
+		searchController.searchBar.becomeFirstResponder()
     }
     
     override func didTransition(to presentationStyle: MSMessagesAppPresentationStyle) {
@@ -156,7 +162,7 @@ class MessagesViewController: MSMessagesAppViewController, UITableViewDataSource
 	}
 	
 	func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-		let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
+		let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! WikipediaMessageCellView
 		
 		// MARK: Table Population Logic
 		let searchResult: Wikipedia
@@ -175,12 +181,14 @@ class MessagesViewController: MSMessagesAppViewController, UITableViewDataSource
 			let image: UIImage? = searchResult.previewImage
 			if image?.ciImage != nil || image?.cgImage != nil {
 				cell.imageView?.image = searchResult.previewImage
-				cell.imageView?.contentMode = .scaleToFill
+				cell.imageView?.contentMode = .right
+				cell.imageView?.autoresizingMask = .flexibleLeftMargin
 			} else {
 //				cell.imageView?.image = UIImage(named: "articlePlaceholderImage")
 				cell.imageView?.kf.setImage(with: searchResult.subjectImageURL, placeholder: #imageLiteral(resourceName: "articlePlaceholderImage") as Placeholder, options: [.transition(.fade(0.2))])
 				
-				cell.imageView?.contentMode = .scaleAspectFill
+				cell.imageView?.contentMode = .scaleToFill
+				cell.imageView?.autoresizingMask = .flexibleLeftMargin
 			}
 			debugPrint(cell)
 		}
@@ -297,13 +305,3 @@ extension MessagesViewController: UISearchBarDelegate {
 	}
 }
 
-extension MessagesViewController {
-	override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
-		debugPrint(UIDevice.current.orientation)
-		if UIDevice.current.orientation.isPortrait {
-			activity.center = CGPoint(x: (searchController.searchBar.frame.maxX - 55.0), y: searchController.searchBar.frame.midY)
-		} else if UIDevice.current.orientation.isLandscape {
-			activity.center = CGPoint(x: (searchController.searchBar.frame.maxX - 10.0), y: searchController.searchBar.frame.midY)
-		}
-	}
-}
