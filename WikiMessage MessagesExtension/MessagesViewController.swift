@@ -8,9 +8,9 @@
 
 import UIKit
 import Messages
-import AwaitKit
-import SwiftSVG
 import SafariServices
+import AwaitKit
+import Kingfisher
 
 class MessagesViewController: MSMessagesAppViewController, UITableViewDataSource, UITableViewDelegate {
 	
@@ -23,6 +23,8 @@ class MessagesViewController: MSMessagesAppViewController, UITableViewDataSource
 	var displayArray = [Wikipedia]()
 	var blankDisplay = Array(repeating: "p", count: 12)
 	var webView: SFSafariViewController?
+	let activity = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.gray)
+	let progress = UIProgressView()
 	
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -37,6 +39,31 @@ class MessagesViewController: MSMessagesAppViewController, UITableViewDataSource
 		// Have to do this the pre-iOS 11.0 way if there's no navigation item
 		tableView.tableHeaderView = searchController.searchBar
 		searchController.searchBar.delegate = self
+		// Change the backgroun from transparent to white to prevent cells from being shown when scrolled
+		// under the search bar itself.
+		// TODO: This is hacky and should be fixed.
+		searchController.searchBar.backgroundColor = .white
+		searchController.searchBar.addSubview(activity)
+		
+		// TODO: Progress bar work
+//		searchController.searchBar.addSubview(progress)
+//		progress.center = CGPoint(x: (searchController.searchBar.frame.midX), y: searchController.searchBar.frame.midY)
+//		progress.bounds = CGRect(x: (searchController.searchBar.frame.minX), y: (searchController.searchBar.frame.minY), width: (searchController.searchBar.frame.width), height: (searchController.searchBar.frame.height) )
+//		progress.transform = progress.transform.scaledBy(x: 1.0, y: 20.0)
+//		progress.trackTintColor = .gray
+
+		searchController.searchBar.autoresizesSubviews = true
+		
+		// Set the position for the loading indicator
+		// TODO: This doesn't seem to reposition properly and seems hacky. It should be fixed.
+		activity.color = .blue
+		activity.hidesWhenStopped = true
+		activity.clipsToBounds = true
+		activity.color = .darkGray
+		activity.center = CGPoint(x: (searchController.searchBar.frame.maxX - 55.0), y: searchController.searchBar.frame.midY)
+		
+		debugPrint(searchController.searchBar.subviews)
+//		let view = UIView(
 		definesPresentationContext = true
 		debugPrint(displayArray, searchController)
 		tableView.reloadData()
@@ -61,6 +88,7 @@ class MessagesViewController: MSMessagesAppViewController, UITableViewDataSource
 		if let url = conversation.selectedMessage?.url {
 			let config = SFSafariViewController.Configuration()
 			config.entersReaderIfAvailable = true
+			config.barCollapsingEnabled = true
 			webView = SFSafariViewController(url: url, configuration: config)
 			present(webView!, animated: true, completion: nil)
 		}
@@ -137,18 +165,25 @@ class MessagesViewController: MSMessagesAppViewController, UITableViewDataSource
 		} else {
 			return cell
 		}
-		
-		cell.textLabel?.text = searchResult.title
-		cell.detailTextLabel?.text = searchResult.subjectLine
-		let image: UIImage? = searchResult.previewImage
-		if image?.ciImage != nil || image?.cgImage != nil {
-			cell.imageView?.image = searchResult.previewImage
-			cell.imageView?.contentMode = .scaleToFill
-		} else {
-			cell.imageView?.image = UIImage(named: "articlePlaceholderImage")
-			cell.imageView?.contentMode = .scaleAspectFill
+		async {
+			cell.textLabel?.text = searchResult.title
+			cell.detailTextLabel?.text = searchResult.subjectLine
+			
+			// Kingfisher image fetch and caching settings
+			cell.imageView?.kf.indicatorType = .activity
+			
+			let image: UIImage? = searchResult.previewImage
+			if image?.ciImage != nil || image?.cgImage != nil {
+				cell.imageView?.image = searchResult.previewImage
+				cell.imageView?.contentMode = .scaleToFill
+			} else {
+//				cell.imageView?.image = UIImage(named: "articlePlaceholderImage")
+				cell.imageView?.kf.setImage(with: searchResult.subjectImageURL, placeholder: #imageLiteral(resourceName: "articlePlaceholderImage") as Placeholder, options: [.transition(.fade(0.2))])
+				
+				cell.imageView?.contentMode = .scaleAspectFill
+			}
+			debugPrint(cell)
 		}
-		debugPrint(cell)
 		return cell
 	}
 	
@@ -182,13 +217,23 @@ class MessagesViewController: MSMessagesAppViewController, UITableViewDataSource
 			return
 		} else {
 			// Clear the displayArray in case it's not empty
-			//displayArray.removeAll(keepingCapacity: true)
-			let results = getSearchResults(searchText: searchText)
+			displayArray.removeAll(keepingCapacity: true)
+			self.activity.startAnimating()
+			async {
+				let results = getSearchResults(searchText: searchText)
 			// See WikipediaArticle.swift:71 for explanation
 			//let results = getPreviewImages(articles: resultsPlain)
 //			debugPrint(searchBarIsEmpty(), displayArray, results.count)
-			for i in 0..<results.count {
-				displayArray.insert(results[i], at: i)
+				for i in 0..<results.count {
+					
+					// TODO: Progress bar work
+//					self.progress.setProgress((Float(i+1) / Float(results.count)), animated: true)
+//					debugPrint("THIS IS THE PROGRESS \(self.progress.progress)")
+					
+					self.displayArray.insert(results[i], at: i)
+				}
+				self.tableView.reloadData()
+				self.activity.stopAnimating()
 			}
 //			debugPrint(displayArray)
 			tableView.reloadData()
@@ -208,16 +253,16 @@ class MessagesViewController: MSMessagesAppViewController, UITableViewDataSource
 	// MARK: Article Manipulation
 	
 	// MARK: Covert SVG's on the fly if we run into them
-	func pageImageFromSVG(svgURL: URL) -> UIImage {
-		let uiView = UIView(SVGURL: svgURL) { (svgLayer) in
-			svgLayer.resizeToFit(self.view.bounds)
-		}
-		let renderer = UIGraphicsImageRenderer()
-		let image = renderer.image { ctx in
-			uiView.drawHierarchy(in: uiView.bounds, afterScreenUpdates: true)
-		}
-		return image
-	}
+//	func pageImageFromSVG(svgURL: URL) -> UIImage {
+//		let uiView = UIView(SVGURL: svgURL) { (svgLayer) in
+//			svgLayer.resizeToFit(self.view.bounds)
+//		}
+//		let renderer = UIGraphicsImageRenderer()
+//		let image = renderer.image { ctx in
+//			uiView.drawHierarchy(in: uiView.bounds, afterScreenUpdates: true)
+//		}
+//		return image
+//	}
 }
 
 extension MessagesViewController: UISearchResultsUpdating {
@@ -230,12 +275,18 @@ extension MessagesViewController: UISearchResultsUpdating {
 extension MessagesViewController: UISearchBarDelegate {
 	// MARK: UISearchBarDelegate
 	func searchBarShouldEndEditing(_ searchBar: UISearchBar) -> Bool {
-		searchBar.resignFirstResponder()
+//		searchBar.resignFirstResponder()
 		return true
 	}
 	
 	func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+		self.tableView.reloadData()
 		searchBar.resignFirstResponder()
+	}
+	
+	func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+		self.displayArray.removeAll(keepingCapacity: true)
+		self.tableView.reloadData()
 	}
 	
 	func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
@@ -243,5 +294,16 @@ extension MessagesViewController: UISearchBarDelegate {
 	
 	func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
 		requestPresentationStyle(.expanded)
+	}
+}
+
+extension MessagesViewController {
+	override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+		debugPrint(UIDevice.current.orientation)
+		if UIDevice.current.orientation.isPortrait {
+			activity.center = CGPoint(x: (searchController.searchBar.frame.maxX - 55.0), y: searchController.searchBar.frame.midY)
+		} else if UIDevice.current.orientation.isLandscape {
+			activity.center = CGPoint(x: (searchController.searchBar.frame.maxX - 10.0), y: searchController.searchBar.frame.midY)
+		}
 	}
 }

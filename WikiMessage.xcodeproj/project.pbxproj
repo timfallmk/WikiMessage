@@ -16,10 +16,10 @@
 		7431DD671FE19E7900AFD512 /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7431DD651FE19E7900AFD512 /* MainInterface.storyboard */; };
 		7431DD691FE19E7900AFD512 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7431DD681FE19E7900AFD512 /* Assets.xcassets */; };
 		74C9780F1FF461BF00880F2C /* WikiMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74C9780E1FF461BF00880F2C /* WikiMessage.swift */; };
+		74D2033F2008009E0031E448 /* Kingfisher.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 74D2033E2008009E0031E448 /* Kingfisher.framework */; };
 		74DCF3632006BA2F000EA7C1 /* SwiftyJSON.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 74DCF3622006BA2F000EA7C1 /* SwiftyJSON.framework */; };
 		74DCF3652006BA34000EA7C1 /* PromiseKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 74DCF3642006BA34000EA7C1 /* PromiseKit.framework */; };
 		74DCF3672006BA37000EA7C1 /* AwaitKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 74DCF3662006BA37000EA7C1 /* AwaitKit.framework */; };
-		74DCF3692006BA3A000EA7C1 /* SwiftSVG.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 74DCF3682006BA3A000EA7C1 /* SwiftSVG.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -59,10 +59,10 @@
 		7431DD681FE19E7900AFD512 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		7431DD6A1FE19E7900AFD512 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		74C9780E1FF461BF00880F2C /* WikiMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WikiMessage.swift; sourceTree = "<group>"; };
+		74D2033E2008009E0031E448 /* Kingfisher.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Kingfisher.framework; path = Carthage/Build/iOS/Kingfisher.framework; sourceTree = "<group>"; };
 		74DCF3622006BA2F000EA7C1 /* SwiftyJSON.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftyJSON.framework; path = Carthage/Build/iOS/SwiftyJSON.framework; sourceTree = "<group>"; };
 		74DCF3642006BA34000EA7C1 /* PromiseKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PromiseKit.framework; path = Carthage/Build/iOS/PromiseKit.framework; sourceTree = "<group>"; };
 		74DCF3662006BA37000EA7C1 /* AwaitKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AwaitKit.framework; path = Carthage/Build/iOS/AwaitKit.framework; sourceTree = "<group>"; };
-		74DCF3682006BA3A000EA7C1 /* SwiftSVG.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftSVG.framework; path = Carthage/Build/iOS/SwiftSVG.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -70,7 +70,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				74DCF3692006BA3A000EA7C1 /* SwiftSVG.framework in Frameworks */,
+				74D2033F2008009E0031E448 /* Kingfisher.framework in Frameworks */,
 				74DCF3672006BA37000EA7C1 /* AwaitKit.framework in Frameworks */,
 				74DCF3652006BA34000EA7C1 /* PromiseKit.framework in Frameworks */,
 				74DCF3632006BA2F000EA7C1 /* SwiftyJSON.framework in Frameworks */,
@@ -113,7 +113,7 @@
 		7431DD5F1FE19E7900AFD512 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				74DCF3682006BA3A000EA7C1 /* SwiftSVG.framework */,
+				74D2033E2008009E0031E448 /* Kingfisher.framework */,
 				74DCF3662006BA37000EA7C1 /* AwaitKit.framework */,
 				74DCF3642006BA34000EA7C1 /* PromiseKit.framework */,
 				74DCF3622006BA2F000EA7C1 /* SwiftyJSON.framework */,
@@ -164,7 +164,7 @@
 				7431DD571FE19E7900AFD512 /* Sources */,
 				7431DD581FE19E7900AFD512 /* Frameworks */,
 				7431DD591FE19E7900AFD512 /* Resources */,
-				7401FD571FE9CCB600E1C92C /* ShellScript */,
+				7401FD571FE9CCB600E1C92C /* Run Script */,
 			);
 			buildRules = (
 			);
@@ -235,7 +235,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		7401FD571FE9CCB600E1C92C /* ShellScript */ = {
+		7401FD571FE9CCB600E1C92C /* Run Script */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -244,13 +244,12 @@
 				"$(SRCROOT)/Carthage/Build/iOS/SwiftyJSON.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/PromiseKit.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/AwaitKit.framework",
-				"$(SRCROOT)/Carthage/Build/iOS/SwiftSVG.framework",
 			);
+			name = "Run Script";
 			outputPaths = (
 				"$(DERIVED_FILE_DIR)/SwiftyJSON.framework",
 				"$(DERIVED_FILE_DIR)/PromiseKit.framework",
 				"$(DERIVED_FILE_DIR)/AwaitKit.framework",
-				"$(DERIVED_FILE_DIR)/SwiftSVG.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -265,13 +264,13 @@
 				"$(SRCROOT)/Carthage/Build/iOS/SwiftyJSON.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/PromiseKit.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/AwaitKit.framework",
-				"$(SRCROOT)/Carthage/Build/iOS/SwiftSVG.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/Kingfisher.framework",
 			);
 			outputPaths = (
 				"$(DERIVED_FILE_DIR)/SwiftyJSON.framework",
 				"$(DERIVED_FILE_DIR)/PromiseKit.framework",
 				"$(DERIVED_FILE_DIR)/AwaitKit.framework",
-				"$(DERIVED_FILE_DIR)/SwiftSVG.framework",
+				"$(DERIVED_FILE_DIR)/Kingfisher.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -434,7 +433,7 @@
 					"$(PROJECT_DIR)/Carthage/Build/Mac",
 				);
 				INFOPLIST_FILE = "WikiMessage MessagesExtension/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.timfall.WikiMessage.MessagesExtension;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -459,7 +458,7 @@
 					"$(PROJECT_DIR)/Carthage/Build/Mac",
 				);
 				INFOPLIST_FILE = "WikiMessage MessagesExtension/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.timfall.WikiMessage.MessagesExtension;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -479,6 +478,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = T5VJ9JRCNB;
 				INFOPLIST_FILE = WikiMessage/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.timfall.WikiMessage;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
@@ -495,6 +495,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = T5VJ9JRCNB;
 				INFOPLIST_FILE = WikiMessage/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.timfall.WikiMessage;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
