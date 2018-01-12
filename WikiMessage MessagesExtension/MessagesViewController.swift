@@ -162,7 +162,7 @@ class MessagesViewController: MSMessagesAppViewController, UITableViewDataSource
 	}
 	
 	func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-		let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! WikipediaMessageCellView
+		let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
 		
 		// MARK: Table Population Logic
 		let searchResult: Wikipedia
