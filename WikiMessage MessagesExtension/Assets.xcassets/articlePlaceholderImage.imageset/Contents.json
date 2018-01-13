@@ -2,17 +2,15 @@
   "images" : [
     {
       "idiom" : "universal",
-      "filename" : "Wikipedia's_W-2.pdf",
       "scale" : "1x"
     },
     {
       "idiom" : "universal",
-      "filename" : "Wikipedia's_W-1.pdf",
       "scale" : "2x"
     },
     {
       "idiom" : "universal",
-      "filename" : "Wikipedia's_W.pdf",
+      "filename" : "2000px-Wikipedia's_W.svg.png",
       "scale" : "3x"
     }
   ],
