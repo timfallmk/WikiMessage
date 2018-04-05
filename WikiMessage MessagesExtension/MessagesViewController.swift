@@ -227,6 +227,7 @@ class MessagesViewController: MSMessagesAppViewController, UITableViewDataSource
 			// Clear the displayArray in case it's not empty
 			displayArray.removeAll(keepingCapacity: true)
 			self.activity.startAnimating()
+			self.tableView.beginUpdates()
 			async {
 				let results = getSearchResults(searchText: searchText)
 			// See WikipediaArticle.swift:71 for explanation
@@ -240,9 +241,10 @@ class MessagesViewController: MSMessagesAppViewController, UITableViewDataSource
 					
 					self.displayArray.insert(results[i], at: i)
 				}
-				self.tableView.reloadData()
+//				self.tableView.reloadData()
 				self.activity.stopAnimating()
 			}
+			self.tableView.endUpdates()
 //			debugPrint(displayArray)
 			tableView.reloadData()
 		}

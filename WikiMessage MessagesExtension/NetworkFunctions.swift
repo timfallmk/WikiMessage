@@ -43,10 +43,10 @@ class NetworkFunctions {
 			URLQueryItem(name: "pageids", value: id)
 		]
 		
-		return Promise<Wikipedia> { fulfill, reject in
+		return Promise<Wikipedia> { seal in
 			URLSession.shared.dataTask(with: components.url!) { (data, response, error) in
 				if error != nil {
-					reject(error!)
+					seal.reject(error!)
 				}
 				guard let data = data else { return }
 				do {
@@ -60,9 +60,9 @@ class NetworkFunctions {
 									   fullText: nil,
 									   subjectImageURL: nil,
 									   previewImage: nil)
-					fulfill(result)
+					seal.fulfill(result)
 				} catch {
-					reject(error)
+					seal.reject(error)
 				}
 			}.resume()
 		}
@@ -92,10 +92,10 @@ class NetworkFunctions {
 			URLQueryItem(name: "pageids", value: id)
 		]
 		
-		return Promise { fulfill, reject in
+		return Promise { seal in
 			URLSession.shared.dataTask(with: components.url!) { (data, response, error) in
 				if error != nil {
-					reject(error!)
+					seal.reject(error!)
 				}
 				guard let data = data else { return }
 				do {
@@ -113,9 +113,9 @@ class NetworkFunctions {
 										   fullText: article?["extract"]!.string,
 										   subjectImageURL: nil,
 										   previewImage: nil)
-					fulfill(result)
+					seal.fulfill(result)
 				} catch {
-					reject(error)
+					seal.reject(error)
 				}
 			}.resume()
 		}
@@ -142,10 +142,10 @@ class NetworkFunctions {
 			URLQueryItem(name: "pageids", value: id)
 		]
 		
-		return Promise { fulfill, reject in
+		return Promise { seal in
 			URLSession.shared.dataTask(with: components.url!) { (data, response, error) in
 				if error != nil {
-					reject(error!)
+					seal.reject(error!)
 				}
 				guard let data = data else { return }
 				do {
@@ -154,12 +154,12 @@ class NetworkFunctions {
 					if thumbnails?.isEmpty == false {
 						let sourceURL = thumbnails?["source"]?.url
 						let data = try? Data(contentsOf: sourceURL!)
-						fulfill(UIImage(data: data!)!)
+						seal.fulfill(UIImage(data: data!)!)
 					} else {
-						reject(NoThumbnailError.NoThumbnailError("No images found!"))
+						seal.reject(NoThumbnailError.NoThumbnailError("No images found!"))
 					}
 				} catch {
-					reject(error)
+					seal.reject(error)
 				}
 				}.resume()
 		}
@@ -185,10 +185,10 @@ class NetworkFunctions {
 			URLQueryItem(name: "pageids", value: id)
 		]
 		
-		return Promise { fulfill, reject in
+		return Promise { seal in
 			URLSession.shared.dataTask(with: components.url!) { (data, response, error) in
 				if error != nil {
-					reject(error!)
+					seal.reject(error!)
 				}
 				guard let data = data else { return }
 				do {
@@ -196,12 +196,12 @@ class NetworkFunctions {
 					let thumbnails = json["query"]["pages"][0]["thumbnail"].dictionary
 					if thumbnails?.isEmpty == false {
 						let sourceURL = thumbnails?["source"]?.url
-						fulfill(sourceURL!)
+						seal.fulfill(sourceURL!)
 					} else {
-						reject(NoThumbnailError.NoThumbnailError("No thumbnail found for \(data)"))
+						seal.reject(NoThumbnailError.NoThumbnailError("No thumbnail found for \(data)"))
 					}
 				} catch {
-					reject(error)
+					seal.reject(error)
 				}
 				}.resume()
 		}
@@ -227,10 +227,10 @@ class NetworkFunctions {
 			URLQueryItem(name: "pageids", value: id)
 		]
 		
-		return Promise { fulfill, reject in
+		return Promise { seal in
 			URLSession.shared.dataTask(with: components.url!) { (data, response, error) in
 				if error != nil {
-					reject(error!)
+					seal.reject(error!)
 				}
 				guard let data = data else { return }
 				do {
@@ -239,12 +239,12 @@ class NetworkFunctions {
 					if thumbnails?.isEmpty == false {
 						let sourceURL = thumbnails?["source"]?.url
 						let data = try? Data(contentsOf: sourceURL!)
-						fulfill(UIImage(data: data!)!)
+						seal.fulfill(UIImage(data: data!)!)
 					} else {
-						reject(NoThumbnailError.NoThumbnailError("No images found"))
+						seal.reject(NoThumbnailError.NoThumbnailError("No images found"))
 					}
 				} catch {
-					reject(error)
+					seal.reject(error)
 				}
 				}.resume()
 		}
@@ -270,10 +270,10 @@ class NetworkFunctions {
 			URLQueryItem(name: "pageids", value: id)
 		]
 		
-		return Promise { fulfill, reject in
+		return Promise { seal in
 			URLSession.shared.dataTask(with: components.url!) { (data, response, error) in
 				if error != nil {
-					reject(error!)
+					seal.reject(error!)
 				}
 				guard let data = data else { return }
 				do {
@@ -281,12 +281,12 @@ class NetworkFunctions {
 					let thumbnails = json["query"]["pages"][0]["original"].dictionary
 					if thumbnails?.isEmpty == false {
 						let sourceURL = thumbnails?["source"]?.url
-						fulfill(sourceURL!)
+						seal.fulfill(sourceURL!)
 					} else {
-						reject(NoThumbnailError.NoThumbnailError("No fullsize page image found for \(data)"))
+						seal.reject(NoThumbnailError.NoThumbnailError("No fullsize page image found for \(data)"))
 					}
 				} catch {
-					reject(error)
+					seal.reject(error)
 				}
 				}.resume()
 		}
@@ -336,11 +336,11 @@ class NetworkFunctions {
 		
 		
 		// Construct the query from the given options and run the request
-		return Promise<[Wikipedia]> { fulfill, reject in
+		return Promise<[Wikipedia]> { seal in
 			URLSession.shared.dataTask(with: components.url!) { (data, response, error) in
 				debugPrint(components.url!)
 				if error != nil {
-					reject(error!)
+					seal.reject(error!)
 				}
 				guard let data = data else { return }
 				do {
@@ -365,11 +365,11 @@ class NetworkFunctions {
 												 subjectImageURL: article!["thumbnail"]?["source"].url ?? nil,
 												 previewImage: previewImage))
 					}
-					fulfill(results)
+					seal.fulfill(results)
 					//				debugPrint(results[1])
 					//				debugPrint(json)
 				} catch let error {
-					reject(error)
+					seal.reject(error)
 				}
 			}.resume()
 		}

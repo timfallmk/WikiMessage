@@ -1,4 +1,4 @@
 github "SwiftyJSON/SwiftyJSON"
-github "mxcl/PromiseKit" ~> 4.0
+github "mxcl/PromiseKit"
 github "yannickl/AwaitKit"
 github "onevcat/Kingfisher"
