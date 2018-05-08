@@ -55,8 +55,12 @@ func populateArticleText(text: String){
 }
 
 func getSearchResults(searchText: String) -> [Wikipedia] {
-	let results = try! await(networkFunctions.searchForArticle(searchText: searchText))
-	return results
+//	let results = try! await(networkFunctions.searchForArticle(searchText: searchText))
+	async {
+		searchResults = try! await(networkFunctions.searchForArticle(searchText: searchText))
+	}
+//	return results
+	return searchResults
 }
 
 func getPreviewImagesURL(articles: [Wikipedia]) -> [Wikipedia] {
