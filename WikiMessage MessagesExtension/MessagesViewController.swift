@@ -178,18 +178,25 @@ class MessagesViewController: MSMessagesAppViewController, UITableViewDataSource
 			// Kingfisher image fetch and caching settings
 			cell.imageView?.kf.indicatorType = .activity
 			
-			let image: UIImage? = searchResult.previewImage
-			if image?.ciImage != nil || image?.cgImage != nil {
-				cell.imageView?.image = searchResult.previewImage
-				cell.imageView?.contentMode = .right
-				cell.imageView?.autoresizingMask = .flexibleLeftMargin
-			} else {
+//			let image: UIImage? = searchResult.previewImage
+//			if image?.ciImage != nil || image?.cgImage != nil {
+//				cell.imageView?.image = searchResult.previewImage
+//				cell.imageView?.contentMode = .right
+//				cell.imageView?.autoresizingMask = .flexibleLeftMargin
+//			} else {
 //				cell.imageView?.image = UIImage(named: "articlePlaceholderImage")
-				cell.imageView?.kf.setImage(with: searchResult.subjectImageURL, placeholder: #imageLiteral(resourceName: "articlePlaceholderImage") as Placeholder, options: [.transition(.fade(0.2))])
-				
-				cell.imageView?.contentMode = .scaleToFill
-				cell.imageView?.autoresizingMask = .flexibleLeftMargin
-			}
+//				cell.imageView?.kf.setImage(with: searchResult.subjectImageURL, placeholder: #imageLiteral(resourceName: "articlePlaceholderImage") as Placeholder, options: [.transition(.fade(0.2))])
+//
+//				cell.imageView?.contentMode = .center
+//				cell.imageView?.autoresizingMask = .flexibleLeftMargin
+//			}
+			cell.imageView?.kf.indicator?.startAnimatingView()
+			cell.imageView?.image = UIImage(named: "articlePlaceholderImage")
+			cell.imageView?.kf.setImage(with: searchResult.subjectImageURL, placeholder: #imageLiteral(resourceName: "articlePlaceholderImage") as Placeholder, options: [.transition(.fade(0.2))])
+			
+			cell.imageView?.contentMode = .scaleAspectFill
+			cell.imageView?.autoresizingMask = .flexibleLeftMargin
+			cell.imageView?.kf.indicator?.stopAnimatingView()
 			debugPrint(cell)
 		}
 		return cell
@@ -227,8 +234,8 @@ class MessagesViewController: MSMessagesAppViewController, UITableViewDataSource
 			// Clear the displayArray in case it's not empty
 			displayArray.removeAll(keepingCapacity: true)
 			self.activity.startAnimating()
-			self.tableView.beginUpdates()
-			async {
+//			self.tableView.beginUpdates()
+//			async {
 				let results = getSearchResults(searchText: searchText)
 			// See WikipediaArticle.swift:71 for explanation
 			//let results = getPreviewImages(articles: resultsPlain)
@@ -241,11 +248,11 @@ class MessagesViewController: MSMessagesAppViewController, UITableViewDataSource
 					
 					self.displayArray.insert(results[i], at: i)
 				}
-//				self.tableView.reloadData()
+				self.tableView.reloadData()
 				self.activity.stopAnimating()
-			}
-			self.tableView.endUpdates()
-//			debugPrint(displayArray)
+//			}
+//			self.tableView.endUpdates()
+			debugPrint(displayArray)
 			tableView.reloadData()
 		}
 	}
