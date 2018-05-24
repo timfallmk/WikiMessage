@@ -11,6 +11,7 @@ import Messages
 import SafariServices
 import AwaitKit
 import Kingfisher
+import Whisper
 
 class MessagesViewController: MSMessagesAppViewController, UITableViewDataSource, UITableViewDelegate {
 	
@@ -26,6 +27,9 @@ class MessagesViewController: MSMessagesAppViewController, UITableViewDataSource
 	var webView: SFSafariViewController?
 	let activity = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.gray)
 	let progress = UIProgressView()
+	let notificationViewController = UIViewController()
+	let notificationView = UIView()
+	let networkOfflineNotification = Announcement(title: "Connection", subtitle: "Network appears to be offline", image: #imageLiteral(resourceName: "notificationIcon"), duration: 2, action: nil)
 	
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -45,6 +49,11 @@ class MessagesViewController: MSMessagesAppViewController, UITableViewDataSource
 		// TODO: This is hacky and should be fixed.
 		searchController.searchBar.backgroundColor = .white
 		searchController.searchBar.addSubview(activity)
+		
+		// Mark: Setup notification area
+		notificationViewController.view = notificationView
+		// We have to do it this way because we can't get access to the main UIViewController
+		tableView.tableFooterView = notificationView
 		
 		
 		// TODO: Progress bar work
@@ -285,7 +294,14 @@ class MessagesViewController: MSMessagesAppViewController, UITableViewDataSource
 extension MessagesViewController: UISearchResultsUpdating {
 	// MARK: UISearchResultsUpdating
 	func updateSearchResults(for searchController: UISearchController) {
-		displayResults(searchController.searchBar.text!)
+		if !Reachability.isConnectedToNetwork() {
+			self.displayArray.removeAll(keepingCapacity: true)
+			self.tableView.reloadData()
+			
+			Whisper.show(shout: networkOfflineNotification, to: notificationViewController)
+		} else {
+			displayResults(searchController.searchBar.text!)
+		}
 	}
 }
 

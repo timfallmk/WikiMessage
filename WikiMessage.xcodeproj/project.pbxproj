@@ -15,6 +15,8 @@
 		7431DD641FE19E7900AFD512 /* MessagesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7431DD631FE19E7900AFD512 /* MessagesViewController.swift */; };
 		7431DD671FE19E7900AFD512 /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7431DD651FE19E7900AFD512 /* MainInterface.storyboard */; };
 		7431DD691FE19E7900AFD512 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7431DD681FE19E7900AFD512 /* Assets.xcassets */; };
+		746851C920B66CE300791F20 /* NetworkUtilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 746851C820B66CE300791F20 /* NetworkUtilities.swift */; };
+		746851D320B687BA00791F20 /* Whisper.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 746851D220B687BA00791F20 /* Whisper.framework */; };
 		74C9780F1FF461BF00880F2C /* WikiMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74C9780E1FF461BF00880F2C /* WikiMessage.swift */; };
 		74D2033F2008009E0031E448 /* Kingfisher.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 74D2033E2008009E0031E448 /* Kingfisher.framework */; };
 		74DCF3632006BA2F000EA7C1 /* SwiftyJSON.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 74DCF3622006BA2F000EA7C1 /* SwiftyJSON.framework */; };
@@ -58,6 +60,12 @@
 		7431DD661FE19E7900AFD512 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MainInterface.storyboard; sourceTree = "<group>"; };
 		7431DD681FE19E7900AFD512 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		7431DD6A1FE19E7900AFD512 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		746851C820B66CE300791F20 /* NetworkUtilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkUtilities.swift; sourceTree = "<group>"; };
+		746851CA20B681D600791F20 /* NotificationBanner.framework.dSYM */ = {isa = PBXFileReference; lastKnownFileType = wrapper.dsym; name = NotificationBanner.framework.dSYM; path = Carthage/Build/iOS/NotificationBanner.framework.dSYM; sourceTree = "<group>"; };
+		746851CC20B681EF00791F20 /* NotificationBanner.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = NotificationBanner.framework; path = Carthage/Build/iOS/NotificationBanner.framework; sourceTree = "<group>"; };
+		746851CD20B681EF00791F20 /* SnapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SnapKit.framework; path = Carthage/Build/iOS/SnapKit.framework; sourceTree = "<group>"; };
+		746851CE20B681EF00791F20 /* MarqueeLabelSwift.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MarqueeLabelSwift.framework; path = Carthage/Build/iOS/MarqueeLabelSwift.framework; sourceTree = "<group>"; };
+		746851D220B687BA00791F20 /* Whisper.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Whisper.framework; path = Carthage/Build/iOS/Whisper.framework; sourceTree = "<group>"; };
 		74C9780E1FF461BF00880F2C /* WikiMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WikiMessage.swift; sourceTree = "<group>"; };
 		74D2033E2008009E0031E448 /* Kingfisher.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Kingfisher.framework; path = Carthage/Build/iOS/Kingfisher.framework; sourceTree = "<group>"; };
 		74DCF3622006BA2F000EA7C1 /* SwiftyJSON.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftyJSON.framework; path = Carthage/Build/iOS/SwiftyJSON.framework; sourceTree = "<group>"; };
@@ -70,6 +78,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				746851D320B687BA00791F20 /* Whisper.framework in Frameworks */,
 				74D2033F2008009E0031E448 /* Kingfisher.framework in Frameworks */,
 				74DCF3672006BA37000EA7C1 /* AwaitKit.framework in Frameworks */,
 				74DCF3652006BA34000EA7C1 /* PromiseKit.framework in Frameworks */,
@@ -113,6 +122,11 @@
 		7431DD5F1FE19E7900AFD512 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				746851D220B687BA00791F20 /* Whisper.framework */,
+				746851CE20B681EF00791F20 /* MarqueeLabelSwift.framework */,
+				746851CC20B681EF00791F20 /* NotificationBanner.framework */,
+				746851CD20B681EF00791F20 /* SnapKit.framework */,
+				746851CA20B681D600791F20 /* NotificationBanner.framework.dSYM */,
 				74D2033E2008009E0031E448 /* Kingfisher.framework */,
 				74DCF3662006BA37000EA7C1 /* AwaitKit.framework */,
 				74DCF3642006BA34000EA7C1 /* PromiseKit.framework */,
@@ -128,6 +142,7 @@
 				7431DD631FE19E7900AFD512 /* MessagesViewController.swift */,
 				742CEADA1FEC811200E6B601 /* WikipediaArticle.swift */,
 				74072ACC1FFC7A6C00746C00 /* NetworkFunctions.swift */,
+				746851C820B66CE300791F20 /* NetworkUtilities.swift */,
 				74C9780E1FF461BF00880F2C /* WikiMessage.swift */,
 				7431DD651FE19E7900AFD512 /* MainInterface.storyboard */,
 				7431DD681FE19E7900AFD512 /* Assets.xcassets */,
@@ -265,12 +280,14 @@
 				"$(SRCROOT)/Carthage/Build/iOS/PromiseKit.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/AwaitKit.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/Kingfisher.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/Whisper.framework",
 			);
 			outputPaths = (
 				"$(DERIVED_FILE_DIR)/SwiftyJSON.framework",
 				"$(DERIVED_FILE_DIR)/PromiseKit.framework",
 				"$(DERIVED_FILE_DIR)/AwaitKit.framework",
 				"$(DERIVED_FILE_DIR)/Kingfisher.framework",
+				"$(DERIVED_FILE_DIR)/Whisper.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -285,6 +302,7 @@
 			files = (
 				74072ACD1FFC7A6C00746C00 /* NetworkFunctions.swift in Sources */,
 				742CEADB1FEC811200E6B601 /* WikipediaArticle.swift in Sources */,
+				746851C920B66CE300791F20 /* NetworkUtilities.swift in Sources */,
 				7431DD641FE19E7900AFD512 /* MessagesViewController.swift in Sources */,
 				74C9780F1FF461BF00880F2C /* WikiMessage.swift in Sources */,
 			);
