@@ -25,7 +25,7 @@ class MessagesViewController: MSMessagesAppViewController, UITableViewDataSource
 	var displayArray = [Wikipedia]()
 	var blankDisplay = Array(repeating: "p", count: 12)
 	var webView: SFSafariViewController?
-	let activity = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.gray)
+	let activity = UIActivityIndicatorView(style: UIActivityIndicatorView.Style.gray)
 	let progress = UIProgressView()
 	let notificationViewController = UIViewController()
 	let notificationView = UIView()
@@ -39,7 +39,7 @@ class MessagesViewController: MSMessagesAppViewController, UITableViewDataSource
 		searchController.searchResultsUpdater = self
 		searchController.obscuresBackgroundDuringPresentation = false
 		searchController.searchBar.placeholder = "Search Wikipedia"
-		searchController.searchBar.searchBarStyle = UISearchBarStyle.minimal
+		searchController.searchBar.searchBarStyle = UISearchBar.Style.minimal
 		navigationItem.searchController = searchController
 		// Have to do this the pre-iOS 11.0 way if there's no navigation item
 		tableView.tableHeaderView = searchController.searchBar
