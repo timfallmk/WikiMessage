@@ -22,13 +22,14 @@ struct RootView: View {
                 }
         }
         .environmentObject(searchModel)
-        .sheet(item: $appModel.selectedArticleURL) { url in
-            SafariView(url: url)
-                .ignoresSafeArea()
+        .sheet(isPresented: Binding(
+            get: { appModel.selectedArticleURL != nil },
+            set: { if !$0 { appModel.selectedArticleURL = nil } }
+        )) {
+            if let url = appModel.selectedArticleURL {
+                SafariView(url: url)
+                    .ignoresSafeArea()
+            }
         }
     }
-}
-
-extension URL: @retroactive Identifiable {
-    public var id: String { absoluteString }
 }
