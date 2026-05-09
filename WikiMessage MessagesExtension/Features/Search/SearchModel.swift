@@ -1,15 +1,13 @@
-import Observation
+import Combine
 
 enum SearchPhase {
     case idle, loading, results([Article]), empty, error(Error)
 }
 
-@Observable
-@MainActor
-final class SearchModel {
-    var query: String = ""
-    var phase: SearchPhase = .idle
-    var recentSearches: [String] = RecentSearchesStore.load()
+final class SearchModel: ObservableObject {
+    @Published var query: String = ""
+    @Published private(set) var phase: SearchPhase = .idle
+    @Published private(set) var recentSearches: [String] = RecentSearchesStore.load()
 
     private let service: WikipediaService
 
@@ -17,6 +15,7 @@ final class SearchModel {
         self.service = service
     }
 
+    @MainActor
     func performSearch() async {
         let trimmed = query.trimmingCharacters(in: .whitespaces)
         guard trimmed.count >= 2 else {
@@ -28,11 +27,12 @@ final class SearchModel {
             let articles = try await service.search(query: trimmed)
             phase = articles.isEmpty ? .empty : .results(articles)
         } catch {
-            if (error as? CancellationError) != nil { return }
+            if error is CancellationError { return }
             phase = .error(error)
         }
     }
 
+    @MainActor
     func recordSearch(_ term: String) {
         RecentSearchesStore.save(term)
         recentSearches = RecentSearchesStore.load()

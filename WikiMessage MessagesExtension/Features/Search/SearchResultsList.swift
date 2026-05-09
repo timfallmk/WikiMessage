@@ -1,18 +1,23 @@
 import SwiftUI
 
 struct SearchResultsList: View {
-    @Environment(SearchModel.self) private var searchModel
-    @Environment(AppModel.self) private var appModel
+    @EnvironmentObject private var searchModel: SearchModel
+    @EnvironmentObject private var appModel: AppModel
 
     var body: some View {
         Group {
             switch searchModel.phase {
             case .idle:
-                ContentUnavailableView(
-                    "Search Wikipedia",
-                    systemImage: "magnifyingglass",
-                    description: Text("Type to search for articles.")
-                )
+                VStack(spacing: 12) {
+                    Image(systemName: "magnifyingglass")
+                        .font(.largeTitle)
+                        .foregroundStyle(.secondary)
+                    Text("Search Wikipedia")
+                        .font(.headline)
+                    Text("Type to search for articles.")
+                        .foregroundStyle(.secondary)
+                }
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
             case .loading:
                 LoadingView()
             case .results(let articles):
@@ -21,11 +26,15 @@ struct SearchResultsList: View {
                         .onTapGesture { compose(article) }
                         .contextMenu {
                             if let url = article.articleURL {
-                                Button("Open in Safari", systemImage: "safari") {
+                                Button {
                                     appModel.selectedArticleURL = url
+                                } label: {
+                                    Label("Open in Safari", systemImage: "safari")
                                 }
-                                Button("Copy Link", systemImage: "link") {
+                                Button {
                                     UIPasteboard.general.url = url
+                                } label: {
+                                    Label("Copy Link", systemImage: "link")
                                 }
                             }
                         }
@@ -48,7 +57,7 @@ struct SearchResultsList: View {
     private func compose(_ article: Article) {
         guard let composer = appModel.composer else { return }
         let message = MessageBuilder.build(article: article)
-        searchModel.recordSearch(article.title)
+        Task { await searchModel.recordSearch(article.title) }
         Task {
             try? await composer.insert(message)
         }

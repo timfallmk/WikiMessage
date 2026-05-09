@@ -1,10 +1,8 @@
+import Combine
 import Messages
-import Observation
 
-@Observable
-@MainActor
-final class AppModel {
-    var presentationStyle: MSMessagesAppPresentationStyle = .compact
-    var composer: (any MessageComposer)?
-    var selectedArticleURL: URL?
+final class AppModel: ObservableObject {
+    @Published var presentationStyle: MSMessagesAppPresentationStyle = .compact
+    @Published var composer: (any MessageComposer)?
+    @Published var selectedArticleURL: URL?
 }

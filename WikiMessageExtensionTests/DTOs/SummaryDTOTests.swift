@@ -1,40 +1,39 @@
-import Testing
-import Foundation
+import XCTest
 @testable import WikiMessage_MessagesExtension
 
-@Suite("SummaryDTO decoding")
-struct SummaryDTOTests {
+final class SummaryDTOTests: XCTestCase {
 
     private let decoder = JSONDecoder()
 
     private func fixture() throws -> Data {
-        let url = Bundle(for: type(of: MockURLProtocol())).url(forResource: "summary_einstein", withExtension: "json")!
+        let bundle = Bundle(for: type(of: self))
+        let url = try XCTUnwrap(bundle.url(forResource: "summary_einstein", withExtension: "json"))
         return try Data(contentsOf: url)
     }
 
-    @Test func decodesTitle() throws {
+    func testDecodesTitle() throws {
         let dto = try decoder.decode(SummaryDTO.self, from: fixture())
-        #expect(dto.title == "Albert_Einstein")
-        #expect(dto.displayTitle == "Albert Einstein")
+        XCTAssertEqual(dto.title, "Albert_Einstein")
+        XCTAssertEqual(dto.displayTitle, "Albert Einstein")
     }
 
-    @Test func decodesDescription() throws {
+    func testDecodesDescription() throws {
         let dto = try decoder.decode(SummaryDTO.self, from: fixture())
-        #expect(dto.description?.isEmpty == false)
+        XCTAssertFalse(dto.description?.isEmpty ?? true)
     }
 
-    @Test func decodesExtract() throws {
+    func testDecodesExtract() throws {
         let dto = try decoder.decode(SummaryDTO.self, from: fixture())
-        #expect(dto.extract != nil)
+        XCTAssertNotNil(dto.extract)
     }
 
-    @Test func decodesThumbnailURL() throws {
+    func testDecodesThumbnailURL() throws {
         let dto = try decoder.decode(SummaryDTO.self, from: fixture())
-        #expect(dto.thumbnail?.source != nil)
+        XCTAssertNotNil(dto.thumbnail?.source)
     }
 
-    @Test func decodesArticleURL() throws {
+    func testDecodesArticleURL() throws {
         let dto = try decoder.decode(SummaryDTO.self, from: fixture())
-        #expect(dto.contentURLs?.desktop?.page?.absoluteString.contains("wikipedia.org") == true)
+        XCTAssertTrue(dto.contentURLs?.desktop?.page?.absoluteString.contains("wikipedia.org") ?? false)
     }
 }

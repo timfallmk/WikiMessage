@@ -30,7 +30,10 @@ final class MockURLProtocol: URLProtocol, @unchecked Sendable {
 
     static func fixture(named name: String, extension ext: String = "json") -> Data {
         let bundle = Bundle(for: MockURLProtocol.self)
-        let url = bundle.url(forResource: name, withExtension: ext)!
-        return try! Data(contentsOf: url)
+        guard let url = bundle.url(forResource: name, withExtension: ext),
+              let data = try? Data(contentsOf: url) else {
+            fatalError("Missing fixture: \(name).\(ext)")
+        }
+        return data
     }
 }

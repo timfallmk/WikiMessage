@@ -1,11 +1,10 @@
+import Combine
 import Network
-import Observation
 
-@Observable
-final class NetworkMonitor: @unchecked Sendable {
+final class NetworkMonitor: ObservableObject, @unchecked Sendable {
     static let shared = NetworkMonitor()
 
-    private(set) var isConnected: Bool = true
+    @Published private(set) var isConnected: Bool = true
 
     private let monitor = NWPathMonitor()
     private let queue = DispatchQueue(label: "com.timfall.WikiMessage.NetworkMonitor")

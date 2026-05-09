@@ -1,8 +1,8 @@
 import SwiftUI
 
 struct RootView: View {
-    @State private var searchModel = SearchModel()
-    @Environment(AppModel.self) private var appModel
+    @StateObject private var searchModel = SearchModel()
+    @EnvironmentObject private var appModel: AppModel
 
     var body: some View {
         NavigationStack {
@@ -21,7 +21,7 @@ struct RootView: View {
                     }
                 }
         }
-        .environment(searchModel)
+        .environmentObject(searchModel)
         .sheet(item: $appModel.selectedArticleURL) { url in
             SafariView(url: url)
                 .ignoresSafeArea()

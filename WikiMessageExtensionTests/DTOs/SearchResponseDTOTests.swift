@@ -1,42 +1,41 @@
-import Testing
-import Foundation
+import XCTest
 @testable import WikiMessage_MessagesExtension
 
-@Suite("SearchResponseDTO decoding")
-struct SearchResponseDTOTests {
+final class SearchResponseDTOTests: XCTestCase {
 
     private let decoder = JSONDecoder()
 
     private func fixture() throws -> Data {
-        let url = Bundle(for: type(of: MockURLProtocol())).url(forResource: "search_swift", withExtension: "json")!
+        let bundle = Bundle(for: type(of: self))
+        let url = try XCTUnwrap(bundle.url(forResource: "search_swift", withExtension: "json"))
         return try Data(contentsOf: url)
     }
 
-    @Test func decodesPageCount() throws {
+    func testDecodesPageCount() throws {
         let dto = try decoder.decode(SearchResponseDTO.self, from: fixture())
-        #expect(dto.pages.count == 2)
+        XCTAssertEqual(dto.pages.count, 2)
     }
 
-    @Test func decodesFirstPageFields() throws {
+    func testDecodesFirstPageFields() throws {
         let dto = try decoder.decode(SearchResponseDTO.self, from: fixture())
         let first = dto.pages[0]
-        #expect(first.id == 25460)
-        #expect(first.key == "Swift_(programming_language)")
-        #expect(first.title == "Swift (programming language)")
-        #expect(first.description == "Programming language by Apple Inc.")
-        #expect(first.thumbnail?.source != nil)
+        XCTAssertEqual(first.id, 25460)
+        XCTAssertEqual(first.key, "Swift_(programming_language)")
+        XCTAssertEqual(first.title, "Swift (programming language)")
+        XCTAssertEqual(first.description, "Programming language by Apple Inc.")
+        XCTAssertNotNil(first.thumbnail?.source)
     }
 
-    @Test func handlesNullThumbnail() throws {
+    func testHandlesNullThumbnail() throws {
         let dto = try decoder.decode(SearchResponseDTO.self, from: fixture())
-        #expect(dto.pages[1].thumbnail == nil)
+        XCTAssertNil(dto.pages[1].thumbnail)
     }
 
-    @Test func mapsToArticle() throws {
+    func testMapsToArticle() throws {
         let dto = try decoder.decode(SearchResponseDTO.self, from: fixture())
         let article = Article(searchPage: dto.pages[0])
-        #expect(article.id == 25460)
-        #expect(article.title == "Swift (programming language)")
-        #expect(article.articleURL?.absoluteString.contains("Swift_") == true)
+        XCTAssertEqual(article.id, 25460)
+        XCTAssertEqual(article.title, "Swift (programming language)")
+        XCTAssertTrue(article.articleURL?.absoluteString.contains("Swift_") ?? false)
     }
 }

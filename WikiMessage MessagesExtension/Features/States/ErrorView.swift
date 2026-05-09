@@ -5,13 +5,19 @@ struct ErrorView: View {
     let retry: () -> Void
 
     var body: some View {
-        ContentUnavailableView {
-            Label("Something went wrong", systemImage: "exclamationmark.triangle")
-        } description: {
+        VStack(spacing: 16) {
+            Image(systemName: "exclamationmark.triangle")
+                .font(.largeTitle)
+                .foregroundStyle(.secondary)
+            Text("Something went wrong")
+                .font(.headline)
             Text(error.localizedDescription)
-        } actions: {
+                .foregroundStyle(.secondary)
+                .multilineTextAlignment(.center)
             Button("Try Again", action: retry)
                 .buttonStyle(.bordered)
         }
+        .padding()
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
 }

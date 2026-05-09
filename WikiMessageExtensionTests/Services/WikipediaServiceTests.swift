@@ -1,63 +1,59 @@
-import Testing
-import Foundation
+import XCTest
 @testable import WikiMessage_MessagesExtension
 
-@Suite("WikipediaService")
-struct WikipediaServiceTests {
+final class WikipediaServiceTests: XCTestCase {
 
-    private func makeService() -> (WikipediaService, URLSession) {
+    private func makeService() -> WikipediaService {
         let config = URLSessionConfiguration.ephemeral
         config.protocolClasses = [MockURLProtocol.self]
         let session = URLSession(configuration: config)
         let client = HTTPClient(session: session)
-        return (WikipediaService(client: client), session)
+        return WikipediaService(client: client)
     }
 
-    @Test func searchBuildsCorrectURL() async throws {
+    func testSearchBuildsCorrectURL() async throws {
         var capturedURL: URL?
         MockURLProtocol.handler = { request in
             capturedURL = request.url
-            let data = MockURLProtocol.fixture(named: "search_swift")
-            return MockURLProtocol.response(data: data, url: request.url!)
+            return MockURLProtocol.response(data: MockURLProtocol.fixture(named: "search_swift"), url: request.url!)
         }
-        let (service, _) = makeService()
-        _ = try await service.search(query: "swift")
-        #expect(capturedURL?.host() == "api.wikimedia.org")
-        #expect(capturedURL?.path().contains("search/page") == true)
-        #expect(capturedURL?.query()?.contains("q=swift") == true)
+        _ = try await makeService().search(query: "swift")
+        XCTAssertEqual(capturedURL?.host, "api.wikimedia.org")
+        XCTAssertTrue(capturedURL?.path.contains("search/page") ?? false)
+        XCTAssertTrue(capturedURL?.query?.contains("q=swift") ?? false)
     }
 
-    @Test func searchReturnsArticles() async throws {
+    func testSearchReturnsArticles() async throws {
         MockURLProtocol.handler = { request in
-            let data = MockURLProtocol.fixture(named: "search_swift")
-            return MockURLProtocol.response(data: data, url: request.url!)
+            MockURLProtocol.response(data: MockURLProtocol.fixture(named: "search_swift"), url: request.url!)
         }
-        let (service, _) = makeService()
-        let articles = try await service.search(query: "swift")
-        #expect(articles.count == 2)
-        #expect(articles[0].title == "Swift (programming language)")
+        let articles = try await makeService().search(query: "swift")
+        XCTAssertEqual(articles.count, 2)
+        XCTAssertEqual(articles[0].title, "Swift (programming language)")
     }
 
-    @Test func summaryBuildsCorrectURL() async throws {
+    func testSummaryBuildsCorrectURL() async throws {
         var capturedURL: URL?
         MockURLProtocol.handler = { request in
             capturedURL = request.url
-            let data = MockURLProtocol.fixture(named: "summary_einstein")
-            return MockURLProtocol.response(data: data, url: request.url!)
+            return MockURLProtocol.response(data: MockURLProtocol.fixture(named: "summary_einstein"), url: request.url!)
         }
-        let (service, _) = makeService()
-        _ = try await service.summary(for: "Albert_Einstein")
-        #expect(capturedURL?.host() == "en.wikipedia.org")
-        #expect(capturedURL?.path().contains("Albert_Einstein") == true)
+        _ = try await makeService().summary(for: "Albert_Einstein")
+        XCTAssertEqual(capturedURL?.host, "en.wikipedia.org")
+        XCTAssertTrue(capturedURL?.path.contains("Albert_Einstein") ?? false)
     }
 
-    @Test func propagatesHTTPErrors() async throws {
+    func testPropagatesHTTPErrors() async {
         MockURLProtocol.handler = { request in
-            return MockURLProtocol.response(statusCode: 404, data: Data(), url: request.url!)
+            MockURLProtocol.response(statusCode: 404, data: Data(), url: request.url!)
         }
-        let (service, _) = makeService()
-        await #expect(throws: HTTPClient.HTTPError.self) {
-            _ = try await service.search(query: "anything")
+        do {
+            _ = try await makeService().search(query: "anything")
+            XCTFail("Expected HTTPError to be thrown")
+        } catch is HTTPClient.HTTPError {
+            // expected
+        } catch {
+            XCTFail("Unexpected error type: \(error)")
         }
     }
 }

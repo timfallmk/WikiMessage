@@ -2,12 +2,12 @@ import SwiftUI
 
 struct LoadingView: View {
     var body: some View {
-        ContentUnavailableView {
+        VStack(spacing: 12) {
             ProgressView()
                 .controlSize(.large)
-        } description: {
             Text("Searching…")
                 .foregroundStyle(.secondary)
         }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
 }

@@ -1,9 +1,8 @@
-import Testing
 import Messages
+import XCTest
 @testable import WikiMessage_MessagesExtension
 
-@Suite("MessageBuilder")
-struct MessageBuilderTests {
+final class MessageBuilderTests: XCTestCase {
 
     private let article = Article(
         id: 1,
@@ -15,32 +14,29 @@ struct MessageBuilderTests {
         articleURL: URL(string: "https://en.wikipedia.org/wiki/Test_Article")
     )
 
-    @Test func setsCaption() {
-        let message = MessageBuilder.build(article: article)
-        let layout = message.layout as? MSMessageTemplateLayout
-        #expect(layout?.caption == "Test Article")
+    func testSetsCaption() {
+        let layout = MessageBuilder.build(article: article).layout as? MSMessageTemplateLayout
+        XCTAssertEqual(layout?.caption, "Test Article")
     }
 
-    @Test func setsSubcaption() {
-        let message = MessageBuilder.build(article: article)
-        let layout = message.layout as? MSMessageTemplateLayout
-        #expect(layout?.subcaption == "A test description")
+    func testSetsSubcaption() {
+        let layout = MessageBuilder.build(article: article).layout as? MSMessageTemplateLayout
+        XCTAssertEqual(layout?.subcaption, "A test description")
     }
 
-    @Test func truncatesLongSummary() {
-        let message = MessageBuilder.build(article: article)
-        let layout = message.layout as? MSMessageTemplateLayout
-        #expect(layout?.trailingCaption?.hasSuffix("…") == true)
-        #expect((layout?.trailingCaption?.count ?? 0) <= 121)
+    func testTruncatesLongSummary() {
+        let layout = MessageBuilder.build(article: article).layout as? MSMessageTemplateLayout
+        XCTAssertTrue(layout?.trailingCaption?.hasSuffix("…") ?? false)
+        XCTAssertLessThanOrEqual(layout?.trailingCaption?.count ?? 0, 121)
     }
 
-    @Test func setsURL() {
+    func testSetsURL() {
         let message = MessageBuilder.build(article: article)
-        #expect(message.url?.absoluteString == "https://en.wikipedia.org/wiki/Test_Article")
+        XCTAssertEqual(message.url?.absoluteString, "https://en.wikipedia.org/wiki/Test_Article")
     }
 
-    @Test func setsSummaryText() {
+    func testSetsSummaryText() {
         let message = MessageBuilder.build(article: article)
-        #expect(message.summaryText?.contains("Test Article") == true)
+        XCTAssertTrue(message.summaryText?.contains("Test Article") ?? false)
     }
 }

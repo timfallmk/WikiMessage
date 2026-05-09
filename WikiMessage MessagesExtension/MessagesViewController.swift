@@ -12,7 +12,7 @@ final class MessagesViewController: MSMessagesAppViewController {
         super.viewDidLoad()
 
         let root = RootView()
-            .environment(appModel)
+            .environmentObject(appModel)
 
         let hosting = UIHostingController(rootView: AnyView(root))
         hostingController = hosting
@@ -42,8 +42,8 @@ final class MessagesViewController: MSMessagesAppViewController {
     }
 
     override func willTransition(to presentationStyle: MSMessagesAppPresentationStyle) {
-        Task { @MainActor in
-            appModel.presentationStyle = presentationStyle
+        DispatchQueue.main.async {
+            self.appModel.presentationStyle = presentationStyle
         }
     }
 }
