@@ -3,22 +3,12 @@ import SwiftUI
 struct SearchResultsList: View {
     @EnvironmentObject private var searchModel: SearchModel
     @EnvironmentObject private var appModel: AppModel
-    @Environment(\.isSearching) private var isSearching
 
     var body: some View {
         Group {
             switch searchModel.phase {
             case .idle:
-                VStack(spacing: 12) {
-                    Image(systemName: "magnifyingglass")
-                        .font(.largeTitle)
-                        .foregroundStyle(.secondary)
-                    Text("Search Wikipedia")
-                        .font(.headline)
-                    Text("Type to search for articles.")
-                        .foregroundStyle(.secondary)
-                }
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                idleView
             case .loading:
                 LoadingView()
             case .results(let articles):
@@ -53,8 +43,35 @@ struct SearchResultsList: View {
             try? await Task.sleep(for: .milliseconds(300))
             await searchModel.performSearch()
         }
-        .onChange(of: isSearching) { newValue in
-            if newValue { appModel.expandRequest?() }
+    }
+
+    @ViewBuilder
+    private var idleView: some View {
+        if searchModel.recentSearches.isEmpty {
+            VStack(spacing: 12) {
+                Image(systemName: "magnifyingglass")
+                    .font(.largeTitle)
+                    .foregroundStyle(.secondary)
+                Text("Search Wikipedia")
+                    .font(.headline)
+                Text("Type to search for articles.")
+                    .foregroundStyle(.secondary)
+            }
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+        } else {
+            List {
+                Section("Recent") {
+                    ForEach(searchModel.recentSearches, id: \.self) { term in
+                        Button {
+                            searchModel.query = term
+                        } label: {
+                            Label(term, systemImage: "clock")
+                                .foregroundStyle(.primary)
+                        }
+                    }
+                }
+            }
+            .listStyle(.plain)
         }
     }
 
