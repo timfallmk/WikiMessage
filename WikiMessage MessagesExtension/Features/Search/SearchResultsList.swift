@@ -84,12 +84,24 @@ struct SearchResultsList: View {
         }
         Task { @MainActor in
             searchModel.recordSearch(article.title)
-            print("[WM] compose: building message (no image, debug)")
-            let message = MessageBuilder.build(article: article, thumbnailImage: nil)
+            let thumbnail = await fetchThumbnail(article.thumbnailURL)
+            print("[WM] compose: thumbnail=\(thumbnail == nil ? "nil" : "loaded")")
+            let message = MessageBuilder.build(article: article, thumbnailImage: thumbnail)
             print("[WM] compose: message built; url=\(String(describing: message.url))")
             print("[WM] compose: calling composer.insert")
             try? await composer.insert(message)
             print("[WM] compose: composer.insert returned")
+        }
+    }
+
+    private func fetchThumbnail(_ url: URL?) async -> UIImage? {
+        guard let url else { return nil }
+        do {
+            let (data, _) = try await URLSession.shared.data(from: url)
+            return UIImage(data: data)
+        } catch {
+            print("[WM] compose: thumbnail fetch failed \(error)")
+            return nil
         }
     }
 }

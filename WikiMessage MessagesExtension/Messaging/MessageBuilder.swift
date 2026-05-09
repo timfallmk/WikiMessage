@@ -14,7 +14,12 @@ enum MessageBuilder {
             layout.trailingCaption = summary.count > 120 ? truncated + "…" : truncated
         }
 
+        // MSMessageTemplateLayout in iMessage's draft renderer requires either
+        // image or mediaFileURL — leaving both nil triggers an unrecognized
+        // selector crash inside CKComposition.compositionWithShelfPluginPayload.
         layout.image = thumbnailImage
+            ?? UIImage(named: "defaultArticleImage")
+            ?? UIImage(named: "articlePlaceholderImage")
 
         message.layout = layout
         message.url = article.articleURL
