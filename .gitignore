@@ -1,7 +1,24 @@
 
-# Carthage related files
-Carthage
+# Swift Package Manager
+.swiftpm/
+
+# Carthage (legacy — no longer used, but Xcode may regenerate artifacts)
 Cartfile.resolved
+Carthage/
+
+# Certificates and private keys — NEVER commit these
+*.p12
+*.cer
+*.mobileprovision
+
+# Xcode workspace generated files
+**/*.xcworkspace/xcshareddata/IDEWorkspaceChecks.plist
+
+# Xcode-generated Package.swift inside extension folder
+WikiMessage\ MessagesExtension/Package.swift
+
+# Other generated files
+sources.txt
 
 # macOS stuff
 .DS_Store
@@ -57,12 +74,6 @@ Package.resolved
 #
 # Pods/
 
-# Carthage
-#
-# Add this line if you want to avoid checking in source code from Carthage dependencies.
-Carthage/Checkouts
-
-Carthage/Build
 
 # fastlane
 #

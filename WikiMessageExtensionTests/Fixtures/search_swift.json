@@ -1,0 +1,27 @@
+{
+  "pages": [
+    {
+      "id": 25460,
+      "key": "Swift_(programming_language)",
+      "title": "Swift (programming language)",
+      "excerpt": "<span class=\"searchmatch\">Swift</span> is a high-performance system programming language.",
+      "description": "Programming language by Apple Inc.",
+      "thumbnail": {
+        "mimetype": "image/png",
+        "size": null,
+        "width": 320,
+        "height": 320,
+        "duration": null,
+        "url": "//upload.wikimedia.org/wikipedia/commons/thumb/9/9d/Swift_logo.svg/320px-Swift_logo.svg.png"
+      }
+    },
+    {
+      "id": 383994,
+      "key": "Taylor_Swift",
+      "title": "Taylor Swift",
+      "excerpt": "Taylor <span class=\"searchmatch\">Swift</span> is an American singer-songwriter.",
+      "description": null,
+      "thumbnail": null
+    }
+  ]
+}
