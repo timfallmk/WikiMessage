@@ -65,5 +65,5 @@ jobs:
         with:
           xcode-version: "15.4"
 
-      - name: Lint (non-blocking)
-        run: swift format lint --recursive . || true
+      - name: Lint
+        run: swift format lint --recursive .

@@ -1,4 +1,4 @@
-import Messages
+@preconcurrency import Messages
 
 protocol MessageComposer: Sendable {
     @MainActor func insert(_ message: MSMessage) async throws

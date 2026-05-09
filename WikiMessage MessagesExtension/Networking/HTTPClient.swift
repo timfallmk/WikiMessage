@@ -1,4 +1,4 @@
-import Foundation
+@preconcurrency import Foundation
 
 actor HTTPClient {
     static let shared = HTTPClient()

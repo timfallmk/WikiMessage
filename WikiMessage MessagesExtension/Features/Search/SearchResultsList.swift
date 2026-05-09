@@ -82,7 +82,7 @@ struct SearchResultsList: View {
             print("[WM] compose: no composer, returning")
             return
         }
-        Task { await searchModel.recordSearch(article.title) }
+        searchModel.recordSearch(article.title)
         Task { @MainActor in
             print("[WM] compose: building message (no image, debug)")
             let message = MessageBuilder.build(article: article, thumbnailImage: nil)
