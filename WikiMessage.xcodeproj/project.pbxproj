@@ -693,6 +693,7 @@
 		CC000009000000000000000 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = T5VJ9JRCNB;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -702,12 +703,14 @@
 				SWIFT_STRICT_CONCURRENCY = targeted;
 				SWIFT_VERSION = 5.7;
 				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/WikiMessage MessagesExtension.appex/WikiMessage MessagesExtension";
 			};
 			name = Debug;
 		};
 		CC000010000000000000000 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = T5VJ9JRCNB;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -717,6 +720,7 @@
 				SWIFT_STRICT_CONCURRENCY = targeted;
 				SWIFT_VERSION = 5.7;
 				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/WikiMessage MessagesExtension.appex/WikiMessage MessagesExtension";
 			};
 			name = Release;
 		};
