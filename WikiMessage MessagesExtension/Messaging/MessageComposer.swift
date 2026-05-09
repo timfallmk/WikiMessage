@@ -25,19 +25,22 @@ struct LiveMessageComposer: MessageComposer {
         }
         print("[WM] LiveMessageComposer.insert: about to call conversation.insert")
         print("[WM]   localParticipantIdentifier=\(conversation.localParticipantIdentifier)")
+        let request = requestCompactPresentation
         conversation.insert(message) { error in
             if let error {
                 print("[WM] conversation.insert completion: ERROR \(error)")
             } else {
                 print("[WM] conversation.insert completion: success")
             }
+            // Dismiss only after iMessage finishes processing the inserted
+            // message. Calling this synchronously after conversation.insert
+            // races with the host's draft renderer and on iOS 26 leaves the
+            // extension stuck in expanded mode, hiding the bubble.
+            Task { @MainActor in
+                request()
+                print("[WM] conversation.insert completion: requested compact presentation")
+            }
         }
         print("[WM] LiveMessageComposer.insert: conversation.insert returned")
-        // Apple's iMessage sample apps (IceCreamBuilder etc.) consistently
-        // request compact presentation right after insert. Without this,
-        // iMessage's draft renderer may compose into a still-expanded
-        // extension and crash inside CKComposition.
-        requestCompactPresentation()
-        print("[WM] LiveMessageComposer.insert: requested compact presentation")
     }
 }
