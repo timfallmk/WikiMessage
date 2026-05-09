@@ -76,6 +76,7 @@ struct SearchResultsList: View {
         }
     }
 
+    @MainActor
     private func compose(_ article: Article) {
         print("[WM] compose tapped: title=\(article.title) url=\(String(describing: article.articleURL))")
         guard let composer = appModel.composer else {

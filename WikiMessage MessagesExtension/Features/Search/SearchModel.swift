@@ -1,7 +1,11 @@
 import Combine
 
 enum SearchPhase {
-    case idle, loading, results([Article]), empty, error(Error)
+    case idle
+    case loading
+    case results([Article])
+    case empty
+    case error(Error)
 }
 
 final class SearchModel: ObservableObject {
