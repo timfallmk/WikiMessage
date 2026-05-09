@@ -79,7 +79,7 @@ struct SearchResultsList: View {
     private func compose(_ article: Article) {
         guard let composer = appModel.composer else { return }
         Task { await searchModel.recordSearch(article.title) }
-        Task {
+        Task { @MainActor in
             var thumbnail: UIImage? = nil
             if let url = article.thumbnailURL,
                let (data, _) = try? await URLSession.shared.data(from: url) {
