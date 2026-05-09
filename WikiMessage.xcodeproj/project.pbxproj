@@ -349,6 +349,7 @@
 			);
 			dependencies = (
 				CC000007000000000000000 /* PBXTargetDependency */,
+				CC000011000000000000000 /* PBXTargetDependency */,
 			);
 			name = WikiMessageExtensionTests;
 			productName = WikiMessageExtensionTests;
@@ -481,6 +482,11 @@
 			target = 7431DD5A1FE19E7900AFD512 /* WikiMessage MessagesExtension */;
 			targetProxy = CC000008000000000000000 /* PBXContainerItemProxy */;
 		};
+		CC000011000000000000000 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 7431DD501FE19E7800AFD512 /* WikiMessage */;
+			targetProxy = CC000012000000000000000 /* PBXContainerItemProxy */;
+		};
 /* End PBXTargetDependency section */
 
 /* Begin PBXContainerItemProxy section (test) */
@@ -490,6 +496,13 @@
 			proxyType = 1;
 			remoteGlobalIDString = 7431DD5A1FE19E7900AFD512;
 			remoteInfo = "WikiMessage MessagesExtension";
+		};
+		CC000012000000000000000 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7431DD4B1FE19E7800AFD512 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 7431DD501FE19E7800AFD512;
+			remoteInfo = WikiMessage;
 		};
 /* End PBXContainerItemProxy section (test) */
 
@@ -693,7 +706,7 @@
 		CC000009000000000000000 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/WikiMessage MessagesExtension.appex/WikiMessage MessagesExtension";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = T5VJ9JRCNB;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -703,14 +716,14 @@
 				SWIFT_STRICT_CONCURRENCY = targeted;
 				SWIFT_VERSION = 5.7;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/WikiMessage MessagesExtension.appex/WikiMessage MessagesExtension";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/WikiMessage.app/WikiMessage";
 			};
 			name = Debug;
 		};
 		CC000010000000000000000 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/WikiMessage MessagesExtension.appex/WikiMessage MessagesExtension";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = T5VJ9JRCNB;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -720,7 +733,7 @@
 				SWIFT_STRICT_CONCURRENCY = targeted;
 				SWIFT_VERSION = 5.7;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/WikiMessage MessagesExtension.appex/WikiMessage MessagesExtension";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/WikiMessage.app/WikiMessage";
 			};
 			name = Release;
 		};
