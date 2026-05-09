@@ -1,3 +1,4 @@
+import Combine
 import Messages
 import SafariServices
 import SwiftUI
@@ -6,13 +7,47 @@ import UIKit
 final class MessagesViewController: MSMessagesAppViewController {
 
     private let appModel = AppModel()
+    private let searchModel = SearchModel()
+    private let searchBar = UISearchBar()
     private var hostingController: UIHostingController<AnyView>?
+    private var cancellables = Set<AnyCancellable>()
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        setupSearchBar()
+        setupHostingController()
 
+        // Keep UISearchBar text in sync when query changes from SwiftUI (e.g. recent searches)
+        searchModel.$query
+            .receive(on: RunLoop.main)
+            .sink { [weak self] query in
+                if self?.searchBar.text != query {
+                    self?.searchBar.text = query
+                }
+            }
+            .store(in: &cancellables)
+    }
+
+    private func setupSearchBar() {
+        searchBar.searchBarStyle = .minimal
+        searchBar.placeholder = "Search Wikipedia"
+        searchBar.autocapitalizationType = .none
+        searchBar.autocorrectionType = .no
+        searchBar.returnKeyType = .search
+        searchBar.delegate = self
+        searchBar.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(searchBar)
+        NSLayoutConstraint.activate([
+            searchBar.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            searchBar.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            searchBar.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+        ])
+    }
+
+    private func setupHostingController() {
         let root = RootView()
             .environmentObject(appModel)
+            .environmentObject(searchModel)
 
         let hosting = UIHostingController(rootView: AnyView(root))
         hostingController = hosting
@@ -21,29 +56,12 @@ final class MessagesViewController: MSMessagesAppViewController {
         hosting.view.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(hosting.view)
         NSLayoutConstraint.activate([
-            hosting.view.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            hosting.view.topAnchor.constraint(equalTo: searchBar.bottomAnchor),
             hosting.view.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             hosting.view.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             hosting.view.bottomAnchor.constraint(equalTo: view.bottomAnchor),
         ])
         hosting.didMove(toParent: self)
-
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(handleTextFieldFocus),
-            name: UITextField.textDidBeginEditingNotification,
-            object: nil
-        )
-    }
-
-    deinit {
-        NotificationCenter.default.removeObserver(self)
-    }
-
-    @objc private func handleTextFieldFocus() {
-        if presentationStyle == .compact {
-            requestPresentationStyle(.expanded)
-        }
     }
 
     override func willBecomeActive(with conversation: MSConversation) {
@@ -62,5 +80,21 @@ final class MessagesViewController: MSMessagesAppViewController {
         DispatchQueue.main.async {
             self.appModel.presentationStyle = presentationStyle
         }
+    }
+}
+
+extension MessagesViewController: UISearchBarDelegate {
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        searchModel.query = searchText
+    }
+
+    func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
+        if presentationStyle == .compact {
+            requestPresentationStyle(.expanded)
+        }
+    }
+
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        searchBar.resignFirstResponder()
     }
 }

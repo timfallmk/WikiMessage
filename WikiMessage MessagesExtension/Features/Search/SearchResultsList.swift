@@ -1,4 +1,5 @@
 import SwiftUI
+import UIKit
 
 struct SearchResultsList: View {
     @EnvironmentObject private var searchModel: SearchModel
@@ -77,9 +78,14 @@ struct SearchResultsList: View {
 
     private func compose(_ article: Article) {
         guard let composer = appModel.composer else { return }
-        let message = MessageBuilder.build(article: article)
         Task { await searchModel.recordSearch(article.title) }
         Task {
+            var thumbnail: UIImage? = nil
+            if let url = article.thumbnailURL,
+               let (data, _) = try? await URLSession.shared.data(from: url) {
+                thumbnail = UIImage(data: data)
+            }
+            let message = MessageBuilder.build(article: article, thumbnailImage: thumbnail)
             try? await composer.insert(message)
         }
     }
