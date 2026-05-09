@@ -12,14 +12,9 @@ struct LiveMessageComposer: MessageComposer {
     }
 
     func insert(_ message: MSMessage) async throws {
-        try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Void, Error>) in
-            conversation.insert(message) { error in
-                if let error {
-                    continuation.resume(throwing: error)
-                } else {
-                    continuation.resume()
-                }
-            }
+        guard message.url != nil else { return }
+        await MainActor.run {
+            conversation.insert(message, completionHandler: nil)
         }
     }
 }
