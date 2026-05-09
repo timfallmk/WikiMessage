@@ -1,0 +1,21 @@
+{
+  "title": "Albert_Einstein",
+  "displaytitle": "Albert Einstein",
+  "description": "German-born theoretical physicist (1879–1955)",
+  "extract": "Albert Einstein was a German-born theoretical physicist who is widely held to be one of the greatest and most influential scientists of all time.",
+  "thumbnail": {
+    "source": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d3/Albert_Einstein_Head.jpg/320px-Albert_Einstein_Head.jpg",
+    "width": 320,
+    "height": 400
+  },
+  "originalimage": {
+    "source": "https://upload.wikimedia.org/wikipedia/commons/d/d3/Albert_Einstein_Head.jpg",
+    "width": 556,
+    "height": 696
+  },
+  "content_urls": {
+    "desktop": {
+      "page": "https://en.wikipedia.org/wiki/Albert_Einstein"
+    }
+  }
+}

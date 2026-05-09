@@ -1,7 +1,6 @@
 
-# Carthage related files
-Carthage
-Cartfile.resolved
+# Swift Package Manager
+.swiftpm/
 
 # macOS stuff
 .DS_Store
@@ -57,12 +56,6 @@ Package.resolved
 #
 # Pods/
 
-# Carthage
-#
-# Add this line if you want to avoid checking in source code from Carthage dependencies.
-Carthage/Checkouts
-
-Carthage/Build
 
 # fastlane
 #
