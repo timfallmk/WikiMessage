@@ -34,7 +34,7 @@ actor HTTPClient {
 
         var errorDescription: String? {
             switch self {
-            case .badStatus(let code): "Server returned status \(code)."
+            case .badStatus(let code): return "Server returned status \(code)."
             }
         }
     }
