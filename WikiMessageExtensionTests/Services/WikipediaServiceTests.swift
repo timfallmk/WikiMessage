@@ -15,7 +15,8 @@ final class WikipediaServiceTests: XCTestCase {
         var capturedURL: URL?
         MockURLProtocol.handler = { request in
             capturedURL = request.url
-            return MockURLProtocol.response(data: MockURLProtocol.fixture(named: "search_swift"), url: request.url!)
+            let data = MockURLProtocol.fixture(named: "search_swift")
+            return MockURLProtocol.response(data: data, url: request.url!)
         }
         _ = try await makeService().search(query: "swift")
         XCTAssertEqual(capturedURL?.host, "api.wikimedia.org")
@@ -36,7 +37,8 @@ final class WikipediaServiceTests: XCTestCase {
         var capturedURL: URL?
         MockURLProtocol.handler = { request in
             capturedURL = request.url
-            return MockURLProtocol.response(data: MockURLProtocol.fixture(named: "summary_einstein"), url: request.url!)
+            let data = MockURLProtocol.fixture(named: "summary_einstein")
+            return MockURLProtocol.response(data: data, url: request.url!)
         }
         _ = try await makeService().summary(for: "Albert_Einstein")
         XCTAssertEqual(capturedURL?.host, "en.wikipedia.org")

@@ -23,8 +23,14 @@ final class MockURLProtocol: URLProtocol, @unchecked Sendable {
 
     override func stopLoading() {}
 
-    static func response(statusCode: Int = 200, data: Data, url: URL = URL(string: "https://example.com")!) -> (HTTPURLResponse, Data) {
-        let response = HTTPURLResponse(url: url, statusCode: statusCode, httpVersion: nil, headerFields: nil)!
+    static func response(
+        statusCode: Int = 200,
+        data: Data,
+        url: URL = URL(string: "https://example.com")!
+    ) -> (HTTPURLResponse, Data) {
+        let response = HTTPURLResponse(
+            url: url, statusCode: statusCode, httpVersion: nil, headerFields: nil
+        )!
         return (response, data)
     }
 

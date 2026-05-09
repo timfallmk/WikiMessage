@@ -9,7 +9,7 @@ final class MessageBuilderTests: XCTestCase {
         key: "Test_Article",
         title: "Test Article",
         description: "A test description",
-        summary: "A longer summary that might be truncated if it exceeds one hundred and twenty characters in total length.",
+        summary: "A longer summary that might be truncated if it exceeds 120 chars in total length.",
         thumbnailURL: nil,
         articleURL: URL(string: "https://en.wikipedia.org/wiki/Test_Article")
     )

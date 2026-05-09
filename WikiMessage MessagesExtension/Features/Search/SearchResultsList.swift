@@ -86,7 +86,9 @@ struct SearchResultsList: View {
         Task { @MainActor in
             print("[WM] compose: building message (no image, debug)")
             let message = MessageBuilder.build(article: article, thumbnailImage: nil)
-            print("[WM] compose: message built; layout=\(String(describing: message.layout)) url=\(String(describing: message.url))")
+            print("[WM] compose: message built")
+            print("[WM]   layout=\(String(describing: message.layout))")
+            print("[WM]   url=\(String(describing: message.url))")
             print("[WM] compose: calling composer.insert")
             try? await composer.insert(message)
             print("[WM] compose: composer.insert returned")

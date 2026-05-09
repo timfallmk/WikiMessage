@@ -18,7 +18,8 @@ struct LiveMessageComposer: MessageComposer {
             print("[WM] LiveMessageComposer.insert: nil url, skipping")
             return
         }
-        print("[WM] LiveMessageComposer.insert: about to call conversation.insert; localParticipantIdentifier=\(conversation.localParticipantIdentifier)")
+        print("[WM] LiveMessageComposer.insert: about to call conversation.insert")
+        print("[WM]   localParticipantIdentifier=\(conversation.localParticipantIdentifier)")
         conversation.insert(message, completionHandler: nil)
         print("[WM] LiveMessageComposer.insert: conversation.insert returned")
     }

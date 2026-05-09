@@ -13,7 +13,8 @@ actor WikipediaService {
     func search(query: String) async throws -> [Article] {
         inflightSearchTask?.cancel()
         let task = Task<[Article], Error> {
-            var components = URLComponents(string: "https://api.wikimedia.org/core/v1/wikipedia/en/search/page")!
+            let baseURL = "https://api.wikimedia.org/core/v1/wikipedia/en/search/page"
+            var components = URLComponents(string: baseURL)!
             components.queryItems = [
                 URLQueryItem(name: "q", value: query),
                 URLQueryItem(name: "limit", value: "10")
