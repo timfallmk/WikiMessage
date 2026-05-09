@@ -18,7 +18,9 @@ extension Article {
         id = page.id
         key = page.key
         title = page.title
-        description = page.description ?? page.excerpt
+        // The search API wraps matched terms in <span class="searchmatch">…</span>
+        // and uses excerpt as a richer fallback when description is absent.
+        description = page.description ?? page.excerpt?.strippingHTMLTags()
         summary = nil
         thumbnailURL = page.thumbnail?.resolvedURL
         articleURL = URL(string: "https://en.wikipedia.org/wiki/\(page.key)")
@@ -38,11 +40,17 @@ extension Article {
         Article(
             id: id,
             key: key,
-            title: dto.displayTitle ?? dto.title,
+            title: (dto.displayTitle ?? dto.title).strippingHTMLTags(),
             description: dto.description ?? description,
             summary: dto.extract,
             thumbnailURL: dto.thumbnail?.resolvedURL ?? thumbnailURL,
             articleURL: dto.contentURLs?.desktop?.page ?? articleURL
         )
+    }
+}
+
+extension String {
+    fileprivate func strippingHTMLTags() -> String {
+        replacingOccurrences(of: "<[^>]+>", with: "", options: .regularExpression)
     }
 }

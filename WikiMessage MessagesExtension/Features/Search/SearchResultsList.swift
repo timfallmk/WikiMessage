@@ -84,13 +84,24 @@ struct SearchResultsList: View {
         }
         Task { @MainActor in
             searchModel.recordSearch(article.title)
-            let thumbnail = await fetchThumbnail(article.thumbnailURL)
+            let enriched = await enrich(article)
+            let thumbnail = await fetchThumbnail(enriched.thumbnailURL)
             print("[WM] compose: thumbnail=\(thumbnail == nil ? "nil" : "loaded")")
-            let message = MessageBuilder.build(article: article, thumbnailImage: thumbnail)
+            let message = MessageBuilder.build(article: enriched, thumbnailImage: thumbnail)
             print("[WM] compose: message built; url=\(String(describing: message.url))")
             print("[WM] compose: calling composer.insert")
             try? await composer.insert(message)
             print("[WM] compose: composer.insert returned")
+        }
+    }
+
+    private func enrich(_ article: Article) async -> Article {
+        do {
+            let dto = try await WikipediaService.shared.summary(for: article.key)
+            return article.withSummary(dto)
+        } catch {
+            print("[WM] compose: summary fetch failed \(error)")
+            return article
         }
     }
 

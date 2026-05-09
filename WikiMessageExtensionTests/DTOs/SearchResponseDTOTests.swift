@@ -39,4 +39,12 @@ final class SearchResponseDTOTests: XCTestCase {
         XCTAssertEqual(article.title, "Swift (programming language)")
         XCTAssertTrue(article.articleURL?.absoluteString.contains("Swift_") ?? false)
     }
+
+    func testExcerptHTMLIsStrippedWhenUsedAsDescription() throws {
+        let dto = try decoder.decode(SearchResponseDTO.self, from: fixture())
+        // Page 2 has description == nil so we fall back to excerpt.
+        let article = Article(searchPage: dto.pages[1])
+        XCTAssertEqual(article.description, "Taylor Swift is an American singer-songwriter.")
+        XCTAssertFalse(article.description?.contains("<") ?? true)
+    }
 }
