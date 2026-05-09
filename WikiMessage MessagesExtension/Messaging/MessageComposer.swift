@@ -20,7 +20,13 @@ struct LiveMessageComposer: MessageComposer {
         }
         print("[WM] LiveMessageComposer.insert: about to call conversation.insert")
         print("[WM]   localParticipantIdentifier=\(conversation.localParticipantIdentifier)")
-        conversation.insert(message, completionHandler: nil)
+        conversation.insert(message) { error in
+            if let error {
+                print("[WM] conversation.insert completion: ERROR \(error)")
+            } else {
+                print("[WM] conversation.insert completion: success")
+            }
+        }
         print("[WM] LiveMessageComposer.insert: conversation.insert returned")
     }
 }
