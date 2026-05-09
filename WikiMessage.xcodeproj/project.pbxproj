@@ -695,6 +695,7 @@
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = T5VJ9JRCNB;
+				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.timfall.WikiMessage.MessagesExtensionTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -709,6 +710,7 @@
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = T5VJ9JRCNB;
+				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.timfall.WikiMessage.MessagesExtensionTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
