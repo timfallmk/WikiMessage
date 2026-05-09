@@ -30,25 +30,14 @@ jobs:
           key: derived-data-${{ hashFiles('WikiMessage.xcodeproj/project.pbxproj') }}
           restore-keys: derived-data-
 
-      - name: Build for testing
+      - name: Build & Test
         run: |
           xcodebuild \
             -project WikiMessage.xcodeproj \
             -scheme "WikiMessage MessagesExtension" \
             -destination "platform=iOS Simulator,name=iPhone 15,OS=latest" \
             -derivedDataPath ~/Library/Developer/Xcode/DerivedData \
-            clean build-for-testing \
-            CODE_SIGN_IDENTITY="" \
-            CODE_SIGNING_REQUIRED=NO
-
-      - name: Test
-        run: |
-          xcodebuild \
-            -project WikiMessage.xcodeproj \
-            -scheme "WikiMessage MessagesExtension" \
-            -destination "platform=iOS Simulator,name=iPhone 15,OS=latest" \
-            -derivedDataPath ~/Library/Developer/Xcode/DerivedData \
-            test-without-building \
+            clean test \
             CODE_SIGN_IDENTITY="" \
             CODE_SIGNING_REQUIRED=NO
 
