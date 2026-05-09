@@ -27,11 +27,27 @@ final class MessagesViewController: MSMessagesAppViewController {
             hosting.view.bottomAnchor.constraint(equalTo: view.bottomAnchor),
         ])
         hosting.didMove(toParent: self)
+
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(handleTextFieldFocus),
+            name: UITextField.textDidBeginEditingNotification,
+            object: nil
+        )
+    }
+
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
+
+    @objc private func handleTextFieldFocus() {
+        if presentationStyle == .compact {
+            requestPresentationStyle(.expanded)
+        }
     }
 
     override func willBecomeActive(with conversation: MSConversation) {
         appModel.composer = LiveMessageComposer(conversation: conversation)
-        requestPresentationStyle(.expanded)
 
         if let url = conversation.selectedMessage?.url {
             appModel.selectedArticleURL = url
