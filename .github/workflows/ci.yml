@@ -55,7 +55,6 @@ jobs:
   lint:
     name: swift-format
     runs-on: macos-14
-    continue-on-error: true
 
     steps:
       - name: Checkout
@@ -66,5 +65,5 @@ jobs:
         with:
           xcode-version: "15.4"
 
-      - name: Lint
-        run: swift format lint --recursive .
+      - name: Lint (non-blocking)
+        run: swift format lint --recursive . || true
