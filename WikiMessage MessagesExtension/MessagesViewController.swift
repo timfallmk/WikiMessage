@@ -65,9 +65,12 @@ final class MessagesViewController: MSMessagesAppViewController {
     }
 
     override func willBecomeActive(with conversation: MSConversation) {
-        appModel.composer = LiveMessageComposer { [weak self] in
-            self?.activeConversation
-        }
+        appModel.composer = LiveMessageComposer(
+            conversationProvider: { [weak self] in self?.activeConversation },
+            requestCompactPresentation: { [weak self] in
+                self?.requestPresentationStyle(.compact)
+            }
+        )
 
         if let url = conversation.selectedMessage?.url {
             appModel.selectedArticleURL = url

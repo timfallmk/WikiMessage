@@ -10,6 +10,7 @@ struct LiveMessageComposer: MessageComposer {
     // can update this between callbacks." We close over a provider that
     // reads activeConversation lazily on each insert.
     let conversationProvider: @MainActor () -> MSConversation?
+    let requestCompactPresentation: @MainActor () -> Void
 
     @MainActor
     func insert(_ message: MSMessage) async throws {
@@ -32,5 +33,11 @@ struct LiveMessageComposer: MessageComposer {
             }
         }
         print("[WM] LiveMessageComposer.insert: conversation.insert returned")
+        // Apple's iMessage sample apps (IceCreamBuilder etc.) consistently
+        // request compact presentation right after insert. Without this,
+        // iMessage's draft renderer may compose into a still-expanded
+        // extension and crash inside CKComposition.
+        requestCompactPresentation()
+        print("[WM] LiveMessageComposer.insert: requested compact presentation")
     }
 }
