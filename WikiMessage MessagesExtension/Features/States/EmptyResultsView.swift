@@ -8,7 +8,7 @@ struct EmptyResultsView: View {
             Image(systemName: "magnifyingglass")
                 .font(.largeTitle)
                 .foregroundStyle(.secondary)
-            Text("No Results for "\(query)"")
+            Text("No Results for \"\(query)\"")
                 .font(.headline)
             Text("Try a different search term.")
                 .foregroundStyle(.secondary)
