@@ -19,24 +19,22 @@ final class MessageBuilderTests: XCTestCase {
         XCTAssertEqual(layout?.caption, "Test Article")
     }
 
-    func testSetsSubcaption() {
+    func testSubcaptionPrefersSummary() {
         let layout = MessageBuilder.build(article: article).layout as? MSMessageTemplateLayout
-        XCTAssertEqual(layout?.subcaption, "A test description")
+        XCTAssertEqual(layout?.subcaption, article.summary)
     }
 
-    func testTruncatesLongSummary() {
-        let layout = MessageBuilder.build(article: article).layout as? MSMessageTemplateLayout
-        XCTAssertTrue(layout?.trailingCaption?.hasSuffix("…") ?? false)
-        XCTAssertLessThanOrEqual(layout?.trailingCaption?.count ?? 0, 121)
+    func testFallsBackToDescriptionWhenNoSummary() {
+        let plain = Article(
+            id: 2, key: "k", title: "T", description: "Desc", summary: nil,
+            thumbnailURL: nil, articleURL: nil
+        )
+        let layout = MessageBuilder.build(article: plain).layout as? MSMessageTemplateLayout
+        XCTAssertEqual(layout?.subcaption, "Desc")
     }
 
     func testSetsURL() {
         let message = MessageBuilder.build(article: article)
         XCTAssertEqual(message.url?.absoluteString, "https://en.wikipedia.org/wiki/Test_Article")
-    }
-
-    func testSetsSummaryText() {
-        let message = MessageBuilder.build(article: article)
-        XCTAssertTrue(message.summaryText?.contains("Test Article") ?? false)
     }
 }

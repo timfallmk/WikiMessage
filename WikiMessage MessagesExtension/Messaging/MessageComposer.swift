@@ -5,15 +5,19 @@ protocol MessageComposer: Sendable {
 }
 
 struct LiveMessageComposer: MessageComposer {
-    private let conversation: MSConversation
-
-    init(conversation: MSConversation) {
-        self.conversation = conversation
-    }
+    // Apple: "Don't store a reference to the MSConversation parameter.
+    // Always work with the activeConversation property, since the system
+    // can update this between callbacks." We close over a provider that
+    // reads activeConversation lazily on each insert.
+    let conversationProvider: @MainActor () -> MSConversation?
 
     @MainActor
     func insert(_ message: MSMessage) async throws {
         print("[WM] LiveMessageComposer.insert entered")
+        guard let conversation = conversationProvider() else {
+            print("[WM] LiveMessageComposer.insert: no active conversation, skipping")
+            return
+        }
         guard message.url != nil else {
             print("[WM] LiveMessageComposer.insert: nil url, skipping")
             return
