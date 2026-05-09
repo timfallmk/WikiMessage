@@ -23,7 +23,8 @@ final class SearchResponseDTOTests: XCTestCase {
         XCTAssertEqual(first.key, "Swift_(programming_language)")
         XCTAssertEqual(first.title, "Swift (programming language)")
         XCTAssertEqual(first.description, "Programming language by Apple Inc.")
-        XCTAssertNotNil(first.thumbnail?.source)
+        XCTAssertNotNil(first.thumbnail?.url)
+        XCTAssertEqual(first.thumbnail?.resolvedURL?.scheme, "https")
     }
 
     func testHandlesNullThumbnail() throws {

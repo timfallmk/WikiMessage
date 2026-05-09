@@ -29,7 +29,17 @@ struct SummaryDTO: Decodable {
 }
 
 struct ThumbnailDTO: Decodable {
+    // Summary REST returns absolute "source"; core v1 search returns
+    // protocol-relative "url" like "//upload.wikimedia.org/..."
     let source: URL?
+    let url: String?
     let width: Int?
     let height: Int?
+
+    var resolvedURL: URL? {
+        if let source { return source }
+        guard let url else { return nil }
+        let absolute = url.hasPrefix("//") ? "https:\(url)" : url
+        return URL(string: absolute)
+    }
 }

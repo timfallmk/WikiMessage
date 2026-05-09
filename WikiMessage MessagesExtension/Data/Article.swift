@@ -20,7 +20,7 @@ extension Article {
         title = page.title
         description = page.description ?? page.excerpt
         summary = nil
-        thumbnailURL = page.thumbnail?.source
+        thumbnailURL = page.thumbnail?.resolvedURL
         articleURL = URL(string: "https://en.wikipedia.org/wiki/\(page.key)")
     }
 
@@ -30,7 +30,7 @@ extension Article {
         title = dto.displayTitle ?? dto.title
         description = dto.description
         summary = dto.extract
-        thumbnailURL = dto.thumbnail?.source
+        thumbnailURL = dto.thumbnail?.resolvedURL
         articleURL = dto.contentURLs?.desktop?.page
     }
 
@@ -41,7 +41,7 @@ extension Article {
             title: dto.displayTitle ?? dto.title,
             description: dto.description ?? description,
             summary: dto.extract,
-            thumbnailURL: dto.thumbnail?.source ?? thumbnailURL,
+            thumbnailURL: dto.thumbnail?.resolvedURL ?? thumbnailURL,
             articleURL: dto.contentURLs?.desktop?.page ?? articleURL
         )
     }
