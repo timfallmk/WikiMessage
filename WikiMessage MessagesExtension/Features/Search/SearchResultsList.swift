@@ -76,20 +76,17 @@ struct SearchResultsList: View {
         }
     }
 
-    @MainActor
     private func compose(_ article: Article) {
-        print("[WM] compose tapped: title=\(article.title) url=\(String(describing: article.articleURL))")
+        print("[WM] compose tapped: title=\(article.title)")
         guard let composer = appModel.composer else {
             print("[WM] compose: no composer, returning")
             return
         }
-        searchModel.recordSearch(article.title)
         Task { @MainActor in
+            searchModel.recordSearch(article.title)
             print("[WM] compose: building message (no image, debug)")
             let message = MessageBuilder.build(article: article, thumbnailImage: nil)
-            print("[WM] compose: message built")
-            print("[WM]   layout=\(String(describing: message.layout))")
-            print("[WM]   url=\(String(describing: message.url))")
+            print("[WM] compose: message built; url=\(String(describing: message.url))")
             print("[WM] compose: calling composer.insert")
             try? await composer.insert(message)
             print("[WM] compose: composer.insert returned")
