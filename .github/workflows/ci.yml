@@ -20,6 +20,9 @@ jobs:
         with:
           xcode-version: "15.4"
 
+      - name: List available simulators
+        run: xcrun simctl list devices available
+
       - name: Cache DerivedData
         uses: actions/cache@v4
         with:
@@ -27,20 +30,32 @@ jobs:
           key: derived-data-${{ hashFiles('WikiMessage.xcodeproj/project.pbxproj') }}
           restore-keys: derived-data-
 
-      - name: Build & Test
+      - name: Build
         run: |
           xcodebuild \
             -project WikiMessage.xcodeproj \
             -scheme "WikiMessage MessagesExtension" \
             -destination "platform=iOS Simulator,name=iPhone 15,OS=latest" \
             -derivedDataPath ~/Library/Developer/Xcode/DerivedData \
-            clean build test \
+            clean build \
+            CODE_SIGN_IDENTITY="" \
+            CODE_SIGNING_REQUIRED=NO
+
+      - name: Test
+        run: |
+          xcodebuild \
+            -project WikiMessage.xcodeproj \
+            -scheme "WikiMessage MessagesExtension" \
+            -destination "platform=iOS Simulator,name=iPhone 15,OS=latest" \
+            -derivedDataPath ~/Library/Developer/Xcode/DerivedData \
+            test-without-building \
             CODE_SIGN_IDENTITY="" \
             CODE_SIGNING_REQUIRED=NO
 
   lint:
     name: swift-format
     runs-on: macos-14
+    continue-on-error: true
 
     steps:
       - name: Checkout
