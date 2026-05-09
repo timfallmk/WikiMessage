@@ -3,6 +3,7 @@ import SwiftUI
 struct SearchResultsList: View {
     @EnvironmentObject private var searchModel: SearchModel
     @EnvironmentObject private var appModel: AppModel
+    @Environment(\.isSearching) private var isSearching
 
     var body: some View {
         Group {
@@ -51,6 +52,9 @@ struct SearchResultsList: View {
         .task(id: searchModel.query) {
             try? await Task.sleep(for: .milliseconds(300))
             await searchModel.performSearch()
+        }
+        .onChange(of: isSearching) { newValue in
+            if newValue { appModel.expandRequest?() }
         }
     }
 
