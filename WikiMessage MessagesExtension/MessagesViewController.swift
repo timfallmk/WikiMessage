@@ -14,6 +14,7 @@ final class MessagesViewController: MSMessagesAppViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        view.backgroundColor = .systemBackground
         setupSearchBar()
         setupHostingController()
 
@@ -53,6 +54,9 @@ final class MessagesViewController: MSMessagesAppViewController {
         hostingController = hosting
 
         addChild(hosting)
+        // Without this, the hosting view forces a white background that ignores
+        // the user's appearance setting.
+        hosting.view.backgroundColor = .clear
         hosting.view.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(hosting.view)
         NSLayoutConstraint.activate([
