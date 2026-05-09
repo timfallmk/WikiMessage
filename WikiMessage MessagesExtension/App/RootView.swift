@@ -3,7 +3,6 @@ import SwiftUI
 struct RootView: View {
     @StateObject private var searchModel = SearchModel()
     @EnvironmentObject private var appModel: AppModel
-    @FocusState private var searchFocused: Bool
 
     var body: some View {
         VStack(spacing: 0) {
@@ -12,9 +11,6 @@ struct RootView: View {
             SearchResultsList()
         }
         .environmentObject(searchModel)
-        .onChange(of: searchFocused) { focused in
-            if focused { appModel.expandRequest?() }
-        }
         .sheet(isPresented: Binding(
             get: { appModel.selectedArticleURL != nil },
             set: { if !$0 { appModel.selectedArticleURL = nil } }
@@ -31,7 +27,6 @@ struct RootView: View {
             Image(systemName: "magnifyingglass")
                 .foregroundStyle(.secondary)
             TextField("Search Wikipedia", text: $searchModel.query)
-                .focused($searchFocused)
                 .autocorrectionDisabled()
                 .textInputAutocapitalization(.never)
                 .submitLabel(.search)

@@ -27,14 +27,11 @@ final class MessagesViewController: MSMessagesAppViewController {
             hosting.view.bottomAnchor.constraint(equalTo: view.bottomAnchor),
         ])
         hosting.didMove(toParent: self)
-
-        appModel.expandRequest = { [weak self] in
-            self?.requestPresentationStyle(.expanded)
-        }
     }
 
     override func willBecomeActive(with conversation: MSConversation) {
         appModel.composer = LiveMessageComposer(conversation: conversation)
+        requestPresentationStyle(.expanded)
 
         if let url = conversation.selectedMessage?.url {
             appModel.selectedArticleURL = url
