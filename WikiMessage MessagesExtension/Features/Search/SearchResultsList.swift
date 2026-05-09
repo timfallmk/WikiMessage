@@ -77,16 +77,19 @@ struct SearchResultsList: View {
     }
 
     private func compose(_ article: Article) {
-        guard let composer = appModel.composer else { return }
+        print("[WM] compose tapped: title=\(article.title) url=\(String(describing: article.articleURL))")
+        guard let composer = appModel.composer else {
+            print("[WM] compose: no composer, returning")
+            return
+        }
         Task { await searchModel.recordSearch(article.title) }
         Task { @MainActor in
-            var thumbnail: UIImage? = nil
-            if let url = article.thumbnailURL,
-               let (data, _) = try? await URLSession.shared.data(from: url) {
-                thumbnail = UIImage(data: data)
-            }
-            let message = MessageBuilder.build(article: article, thumbnailImage: thumbnail)
+            print("[WM] compose: building message (no image, debug)")
+            let message = MessageBuilder.build(article: article, thumbnailImage: nil)
+            print("[WM] compose: message built; layout=\(String(describing: message.layout)) url=\(String(describing: message.url))")
+            print("[WM] compose: calling composer.insert")
             try? await composer.insert(message)
+            print("[WM] compose: composer.insert returned")
         }
     }
 }

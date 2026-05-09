@@ -1,7 +1,7 @@
 import Messages
 
 protocol MessageComposer: Sendable {
-    func insert(_ message: MSMessage) async throws
+    @MainActor func insert(_ message: MSMessage) async throws
 }
 
 struct LiveMessageComposer: MessageComposer {
@@ -11,10 +11,15 @@ struct LiveMessageComposer: MessageComposer {
         self.conversation = conversation
     }
 
+    @MainActor
     func insert(_ message: MSMessage) async throws {
-        guard message.url != nil else { return }
-        await MainActor.run {
-            conversation.insert(message, completionHandler: nil)
+        print("[WM] LiveMessageComposer.insert entered")
+        guard message.url != nil else {
+            print("[WM] LiveMessageComposer.insert: nil url, skipping")
+            return
         }
+        print("[WM] LiveMessageComposer.insert: about to call conversation.insert; localParticipantIdentifier=\(conversation.localParticipantIdentifier)")
+        conversation.insert(message, completionHandler: nil)
+        print("[WM] LiveMessageComposer.insert: conversation.insert returned")
     }
 }
